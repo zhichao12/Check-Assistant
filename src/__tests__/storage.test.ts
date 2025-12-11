@@ -128,7 +128,9 @@ describe('storage', () => {
     });
 
     it('should use local storage when specified', async () => {
-      mockChrome.storage.local.get = vi.fn((_keys: unknown, callback: (items: Record<string, unknown>) => void) => callback({}));
+      mockChrome.storage.local.get = vi.fn(
+        (_keys: unknown, callback: (items: Record<string, unknown>) => void) => callback({})
+      );
 
       await getSites('local');
 
@@ -340,9 +342,9 @@ describe('storage', () => {
         callback({ [STORAGE_KEYS.SITES]: sites });
       });
 
-      await expect(
-        updateSite('1', { url: 'https://site2.com/other' })
-      ).rejects.toThrow('already exists');
+      await expect(updateSite('1', { url: 'https://site2.com/other' })).rejects.toThrow(
+        'already exists'
+      );
     });
   });
 
@@ -580,9 +582,7 @@ describe('storage', () => {
 
     describe('extractHostname', () => {
       it('should extract hostname from valid URL', () => {
-        expect(_testUtils.extractHostname('https://example.com/path')).toBe(
-          'example.com'
-        );
+        expect(_testUtils.extractHostname('https://example.com/path')).toBe('example.com');
       });
 
       it('should return original string for invalid URL', () => {

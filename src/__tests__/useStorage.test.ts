@@ -1,12 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach, type MockInstance } from 'vitest';
 import { mockChrome } from './setup';
 import { StorageService } from '@/lib/hooks/useStorage';
-import {
-  STORAGE_KEYS,
-  DEFAULT_REMINDER_SETTINGS,
-  _testUtils,
-  type SiteEntry,
-} from '@/lib/storage';
+import { STORAGE_KEYS, DEFAULT_REMINDER_SETTINGS, _testUtils, type SiteEntry } from '@/lib/storage';
 
 // Note: useStorage hook tests would require @testing-library/react
 // For now, we test the StorageService class which demonstrates the add/update flows
@@ -79,10 +74,7 @@ describe('StorageService', () => {
         }
       );
 
-      const result = await service.demoAddAndVisit(
-        'Demo Site',
-        'https://demo.example.com'
-      );
+      const result = await service.demoAddAndVisit('Demo Site', 'https://demo.example.com');
 
       expect(result.added).toBeDefined();
       expect(result.added.title).toBe('Demo Site');
@@ -164,12 +156,8 @@ describe('StorageService', () => {
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('[StorageService] Starting CRUD demo...')
       );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[StorageService] Created:')
-      );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[StorageService] Deleted:')
-      );
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[StorageService] Created:'));
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[StorageService] Deleted:'));
       expect(consoleSpy).toHaveBeenCalledWith('[StorageService] CRUD demo completed');
     });
   });
@@ -182,11 +170,9 @@ describe('StorageService', () => {
         }
       );
 
-      mockChrome.storage.sync.set.mockImplementation(
-        (_data: unknown, callback: () => void) => {
-          callback();
-        }
-      );
+      mockChrome.storage.sync.set.mockImplementation((_data: unknown, callback: () => void) => {
+        callback();
+      });
 
       await service.demoSettingsFlow();
 

@@ -242,8 +242,7 @@ export function useStorage(area: StorageArea = 'sync'): UseStorageReturn {
         const settings = await updateSettings(updates, area);
         return settings;
       } catch (err) {
-        const message =
-          err instanceof Error ? err.message : 'Failed to update settings';
+        const message = err instanceof Error ? err.message : 'Failed to update settings';
         setState((prev) => ({ ...prev, error: message }));
         return null;
       }

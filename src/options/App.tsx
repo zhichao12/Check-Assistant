@@ -259,11 +259,7 @@ export default function App() {
           {/* Save Button */}
           <div className="flex items-center justify-end gap-3">
             {saved && <span className="text-sm text-success-600">✓ 已保存</span>}
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="btn-primary min-w-[100px]"
-            >
+            <button onClick={handleSave} disabled={saving} className="btn-primary min-w-[100px]">
               {saving ? '保存中...' : '保存设置'}
             </button>
           </div>

@@ -146,10 +146,7 @@ export type UpdateSiteInput = Partial<
 /**
  * Storage change callback type
  */
-export type StorageChangeCallback<T> = (
-  newValue: T | undefined,
-  oldValue: T | undefined
-) => void;
+export type StorageChangeCallback<T> = (newValue: T | undefined, oldValue: T | undefined) => void;
 
 // ============================================================================
 // Default Values
@@ -334,10 +331,7 @@ export async function getSiteByUrl(
  * @returns Promise resolving to the created site entry
  * @throws Error if site with same URL already exists
  */
-export async function addSite(
-  input: AddSiteInput,
-  area: StorageArea = 'sync'
-): Promise<SiteEntry> {
+export async function addSite(input: AddSiteInput, area: StorageArea = 'sync'): Promise<SiteEntry> {
   const storage = getStorageArea(area);
   const sites = await getSites(area);
 
@@ -423,27 +417,17 @@ export async function updateStatus(
     updatedSite.visitedStatus = value;
     if (value) {
       updatedSite.lastVisitedAt = now;
-      updatedSite.checkInHistory = [
-        ...site.checkInHistory,
-        { timestamp: now, type: 'visit' },
-      ];
+      updatedSite.checkInHistory = [...site.checkInHistory, { timestamp: now, type: 'visit' }];
     }
   } else if (statusType === 'checkedIn') {
     updatedSite.checkedInStatus = value;
     if (value) {
       updatedSite.lastCheckedInAt = now;
-      updatedSite.checkInHistory = [
-        ...site.checkInHistory,
-        { timestamp: now, type: 'manual' },
-      ];
+      updatedSite.checkInHistory = [...site.checkInHistory, { timestamp: now, type: 'manual' }];
     }
   }
 
-  const updatedSites = [
-    ...sites.slice(0, siteIndex),
-    updatedSite,
-    ...sites.slice(siteIndex + 1),
-  ];
+  const updatedSites = [...sites.slice(0, siteIndex), updatedSite, ...sites.slice(siteIndex + 1)];
 
   return new Promise((resolve, reject) => {
     storage.set({ [STORAGE_KEYS.SITES]: updatedSites }, () => {
@@ -490,9 +474,7 @@ export async function updateSite(
   if (updates.url) {
     hostname = extractHostname(updates.url);
     // Check for duplicate hostname (excluding current site)
-    const existingWithHostname = sites.find(
-      (s) => s.hostname === hostname && s.id !== id
-    );
+    const existingWithHostname = sites.find((s) => s.hostname === hostname && s.id !== id);
     if (existingWithHostname) {
       throw new Error(`Site with hostname "${hostname}" already exists`);
     }
@@ -505,11 +487,7 @@ export async function updateSite(
     updatedAt: now,
   };
 
-  const updatedSites = [
-    ...sites.slice(0, siteIndex),
-    updatedSite,
-    ...sites.slice(siteIndex + 1),
-  ];
+  const updatedSites = [...sites.slice(0, siteIndex), updatedSite, ...sites.slice(siteIndex + 1)];
 
   return new Promise((resolve, reject) => {
     storage.set({ [STORAGE_KEYS.SITES]: updatedSites }, () => {
@@ -534,10 +512,7 @@ export async function updateSite(
  * @returns Promise resolving to true if deleted
  * @throws Error if site not found
  */
-export async function deleteSite(
-  id: string,
-  area: StorageArea = 'sync'
-): Promise<boolean> {
+export async function deleteSite(id: string, area: StorageArea = 'sync'): Promise<boolean> {
   const storage = getStorageArea(area);
   const sites = await getSites(area);
 
@@ -569,9 +544,7 @@ export async function deleteSite(
  * @param area - Storage area to use
  * @returns Promise resolving to reminder settings
  */
-export async function getSettings(
-  area: StorageArea = 'sync'
-): Promise<ReminderSettings> {
+export async function getSettings(area: StorageArea = 'sync'): Promise<ReminderSettings> {
   // Check cache first
   if (settingsCache !== null && isCacheValid()) {
     return settingsCache;
@@ -640,9 +613,7 @@ export async function updateSettings(
  * @param area - Storage area to use
  * @returns Promise resolving to updated sites
  */
-export async function resetDailyStatus(
-  area: StorageArea = 'sync'
-): Promise<SiteEntry[]> {
+export async function resetDailyStatus(area: StorageArea = 'sync'): Promise<SiteEntry[]> {
   const storage = getStorageArea(area);
   const sites = await getSites(area);
 
@@ -698,10 +669,7 @@ export function onSitesChange(
   callback: StorageChangeCallback<SiteEntry[]>,
   area: StorageArea = 'sync'
 ): ListenerCleanup {
-  const listener = (
-    changes: { [key: string]: chrome.storage.StorageChange },
-    areaName: string
-  ) => {
+  const listener = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
     if (areaName !== area) return;
 
     if (STORAGE_KEYS.SITES in changes) {
@@ -745,10 +713,7 @@ export function onSettingsChange(
   callback: StorageChangeCallback<ReminderSettings>,
   area: StorageArea = 'sync'
 ): ListenerCleanup {
-  const listener = (
-    changes: { [key: string]: chrome.storage.StorageChange },
-    areaName: string
-  ) => {
+  const listener = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
     if (areaName !== area) return;
 
     if (STORAGE_KEYS.SETTINGS in changes) {
