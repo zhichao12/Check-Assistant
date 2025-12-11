@@ -9,238 +9,186 @@ import {
 } from '@/lib/storage';
 import { generateId } from '@/shared/utils';
 
+import {
+  ToggleSwitch,
+  SectionCard,
+  SettingRow,
+  SettingDivider,
+  Button,
+  Select,
+  ConfirmDialog,
+  ReminderTimeEditor,
+  Toast,
+} from './components';
+
+// ============================================================================
+// Icons
+// ============================================================================
+
+function PaletteIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+      />
+    </svg>
+  );
+}
+
+function BellIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+      />
+    </svg>
+  );
+}
+
+function EyeIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+      />
+    </svg>
+  );
+}
+
+function ClockIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+  );
+}
+
+function DatabaseIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+      />
+    </svg>
+  );
+}
+
+function PlusIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+    </svg>
+  );
+}
+
 // ============================================================================
 // Messaging Utilities
 // ============================================================================
 
-
-/**
- * Send message to background script
- */
 async function sendMessage<T>(message: Message): Promise<MessageResponse<T>> {
   return chrome.runtime.sendMessage(message);
 }
 
 // ============================================================================
-// Toggle Switch Component
+// Theme Selector Component
 // ============================================================================
 
-interface ToggleSwitchProps {
-  enabled: boolean;
-  onToggle: (enabled: boolean) => void;
-  disabled?: boolean;
+interface ThemeSelectorProps {
+  value: ThemePreference;
+  onChange: (theme: ThemePreference) => void;
 }
 
-function ToggleSwitch({ enabled, onToggle, disabled = false }: ToggleSwitchProps) {
-  return (
-    <button
-      onClick={() => !disabled && onToggle(!enabled)}
-      disabled={disabled}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-        disabled ? 'opacity-50 cursor-not-allowed' : ''
-      } ${enabled ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700'}`}
-    >
-      <span
-        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-          enabled ? 'translate-x-6' : 'translate-x-1'
-        }`}
-      />
-    </button>
-  );
-}
-
-// ============================================================================
-// Section Card Component
-// ============================================================================
-
-interface SectionCardProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-}
-
-function SectionCard({ title, description, children }: SectionCardProps) {
-  return (
-    <section className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
-        {description && (
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{description}</p>
-        )}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-// ============================================================================
-// Setting Row Component
-// ============================================================================
-
-interface SettingRowProps {
-  label: string;
-  description?: string;
-  children: React.ReactNode;
-}
-
-function SettingRow({ label, description, children }: SettingRowProps) {
-  return (
-    <div className="flex items-center justify-between py-3">
-      <div className="flex-1 pr-4">
-        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
-        {description && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{description}</p>
-        )}
-      </div>
-      <div className="flex-shrink-0">{children}</div>
-    </div>
-  );
-}
-
-// ============================================================================
-// Reminder Time Editor Component
-// ============================================================================
-
-interface ReminderTimeEditorProps {
-  time: ReminderTime;
-  onChange: (time: ReminderTime) => void;
-  onRemove: () => void;
-  canRemove: boolean;
-}
-
-const DAYS_OF_WEEK = [
-  { value: 1, label: '一', shortLabel: 'M' },
-  { value: 2, label: '二', shortLabel: 'T' },
-  { value: 3, label: '三', shortLabel: 'W' },
-  { value: 4, label: '四', shortLabel: 'T' },
-  { value: 5, label: '五', shortLabel: 'F' },
-  { value: 6, label: '六', shortLabel: 'S' },
-  { value: 0, label: '日', shortLabel: 'S' },
-] as const;
-
-function ReminderTimeEditor({ time, onChange, onRemove, canRemove }: ReminderTimeEditorProps) {
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const [hours, minutes] = e.target.value.split(':').map(Number);
-    onChange({ ...time, hour: hours, minute: minutes });
-  };
-
-  const handleDayToggle = (day: number) => {
-    const days = time.days.includes(day as ReminderTime['days'][0])
-      ? time.days.filter((d) => d !== day)
-      : [...time.days, day as ReminderTime['days'][0]].sort();
-    onChange({ ...time, days });
-  };
-
-  const handleEnabledToggle = () => {
-    onChange({ ...time, enabled: !time.enabled });
-  };
-
-  const timeValue = `${time.hour.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}`;
+function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
+  const themes: { id: ThemePreference; label: string; icon: React.ReactNode }[] = [
+    {
+      id: 'light',
+      label: '浅色',
+      icon: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: 'dark',
+      label: '深色',
+      icon: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: 'system',
+      label: '系统',
+      icon: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          />
+        </svg>
+      ),
+    },
+  ];
 
   return (
-    <div
-      className={`p-4 rounded-lg border ${time.enabled ? 'border-primary-200 dark:border-primary-800 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50'}`}
-    >
-      <div className="flex items-center gap-4 mb-3">
-        <ToggleSwitch enabled={time.enabled} onToggle={handleEnabledToggle} />
-        <input
-          type="time"
-          value={timeValue}
-          onChange={handleTimeChange}
-          disabled={!time.enabled}
-          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
-        />
-        {canRemove && (
-          <button
-            onClick={onRemove}
-            className="p-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
-            title="删除此提醒时间"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
-          </button>
-        )}
-      </div>
-
-      <div className="flex gap-1">
-        {DAYS_OF_WEEK.map(({ value, label }) => (
-          <button
-            key={value}
-            onClick={() => time.enabled && handleDayToggle(value)}
-            disabled={!time.enabled}
-            className={`w-8 h-8 rounded-full text-xs font-medium transition-colors ${
-              !time.enabled
-                ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                : time.days.includes(value as ReminderTime['days'][0])
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
-            }`}
-            title={label}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ============================================================================
-// Confirmation Dialog Component
-// ============================================================================
-
-interface ConfirmDialogProps {
-  isOpen: boolean;
-  title: string;
-  message: string;
-  confirmText: string;
-  onConfirm: () => void;
-  onCancel: () => void;
-  danger?: boolean;
-}
-
-function ConfirmDialog({
-  isOpen,
-  title,
-  message,
-  confirmText,
-  onConfirm,
-  onCancel,
-  danger = false,
-}: ConfirmDialogProps) {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50" onClick={onCancel} />
-      <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md mx-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{title}</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">{message}</p>
-        <div className="flex justify-end gap-3">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
-          >
-            取消
-          </button>
-          <button
-            onClick={onConfirm}
-            className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
-              danger
-                ? 'bg-red-600 hover:bg-red-700'
-                : 'bg-primary-600 hover:bg-primary-700'
-            }`}
-          >
-            {confirmText}
-          </button>
-        </div>
-      </div>
+    <div className="flex gap-2">
+      {themes.map((theme) => (
+        <button
+          key={theme.id}
+          type="button"
+          onClick={() => onChange(theme.id)}
+          className={`
+            flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium
+            transition-all duration-150
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500
+            ${
+              value === theme.id
+                ? 'bg-primary-600 text-white shadow-sm'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+            }
+          `}
+        >
+          {theme.icon}
+          <span className="hidden sm:inline">{theme.label}</span>
+        </button>
+      ))}
     </div>
   );
 }
@@ -253,18 +201,15 @@ export default function App() {
   const [settings, setSettings] = useState<ReminderSettings>(DEFAULT_REMINDER_SETTINGS);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [siteCount, setSiteCount] = useState(0);
-  const [confirmDialog, setConfirmDialog] = useState<{
-    type: 'clear' | 'reset' | null;
-  }>({ type: null });
-
+  const [confirmDialog, setConfirmDialog] = useState<{ type: 'clear' | 'reset' | null }>({
+    type: null,
+  });
 
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
-      setError(null);
 
       const [settingsResponse, sitesResponse] = await Promise.all([
         sendMessage<ReminderSettings>({ type: 'GET_SETTINGS' }),
@@ -280,7 +225,7 @@ export default function App() {
       }
     } catch (err) {
       console.error('Failed to load data:', err);
-      setError('加载设置失败，请刷新页面重试');
+      setToast({ message: '加载设置失败，请刷新页面重试', type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -296,7 +241,6 @@ export default function App() {
     applyTheme(settings.theme);
   }, [settings.theme]);
 
-
   function applyTheme(theme: ThemePreference) {
     const isDark =
       theme === 'dark' ||
@@ -311,7 +255,6 @@ export default function App() {
 
   const handleSave = useCallback(async () => {
     setSaving(true);
-    setError(null);
 
     try {
       const response = await sendMessage<ReminderSettings>({
@@ -320,14 +263,13 @@ export default function App() {
       });
 
       if (response.success) {
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2000);
+        setToast({ message: '设置已保存', type: 'success' });
       } else {
-        setError(response.error || '保存失败');
+        setToast({ message: response.error || '保存失败', type: 'error' });
       }
     } catch (err) {
       console.error('Failed to save settings:', err);
-      setError('保存设置失败，请重试');
+      setToast({ message: '保存设置失败，请重试', type: 'error' });
     } finally {
       setSaving(false);
     }
@@ -401,12 +343,13 @@ export default function App() {
       if (response.success) {
         setSiteCount(0);
         setConfirmDialog({ type: null });
+        setToast({ message: '已清除所有网站', type: 'success' });
       } else {
-        setError(response.error || '清除失败');
+        setToast({ message: response.error || '清除失败', type: 'error' });
       }
     } catch (err) {
       console.error('Failed to clear sites:', err);
-      setError('清除网站失败，请重试');
+      setToast({ message: '清除网站失败，请重试', type: 'error' });
     }
   };
 
@@ -414,161 +357,155 @@ export default function App() {
     try {
       const response = await sendMessage({ type: 'RESET_ALL_STATUS' });
       if (response.success) {
-        // 重置状态后刷新数据，确保角标/列表一致
         await loadData();
         setConfirmDialog({ type: null });
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2000);
+        setToast({ message: '已重置今日状态', type: 'success' });
       } else {
-        setError(response.error || '重置失败');
+        setToast({ message: response.error || '重置失败', type: 'error' });
       }
     } catch (err) {
       console.error('Failed to reset status:', err);
-      setError('重置状态失败，请重试');
+      setToast({ message: '重置状态失败，请重试', type: 'error' });
     }
   };
 
+  // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center transition-colors">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-500 dark:text-gray-400">加载中...</p>
+          <div className="inline-flex items-center justify-center w-12 h-12 mb-4">
+            <svg
+              className="animate-spin w-8 h-8 text-primary-600"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+          </div>
+          <p className="text-sm text-gray-500 dark:text-gray-400">加载中...</p>
         </div>
-
       </div>
     );
   }
 
   return (
-
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
-
-      <div className="max-w-2xl mx-auto py-8 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+      <div className="max-w-2xl mx-auto py-6 sm:py-8 px-4">
         {/* Header */}
-        <header className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">签到助手设置</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">自定义您的签到提醒和偏好设置</p>
+        <header className="mb-6 sm:mb-8">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
+            签到助手设置
+          </h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            自定义您的签到提醒和偏好设置
+          </p>
         </header>
 
-        {/* Error Banner */}
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-              <button
-                onClick={() => setError(null)}
-                className="text-red-500 hover:text-red-700 dark:hover:text-red-300"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Settings Sections */}
-        <div className="space-y-6">
-          {/* Theme Settings */}
+        <div className="space-y-4 sm:space-y-5">
+          {/* Appearance Settings */}
+          <SectionCard
+            title="外观"
+            description="自定义应用外观"
+            icon={<PaletteIcon className="w-5 h-5" />}
+          >
+            <div className="space-y-1">
+              <SettingRow label="主题" description="选择浅色、深色或跟随系统设置">
+                <ThemeSelector value={settings.theme} onChange={handleThemeChange} />
+              </SettingRow>
 
-          <SectionCard title="外观" description="自定义应用外观">
-            <SettingRow label="主题" description="选择浅色、深色或跟随系统设置">
-              <div className="flex gap-2">
+              <SettingDivider />
 
-                {(['light', 'dark', 'system'] as const).map((theme) => (
-                  <button
-                    key={theme}
-                    onClick={() => handleThemeChange(theme)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                      settings.theme === theme
-                        ? 'bg-primary-600 text-white'
-
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-
-                    }`}
-                  >
-                    {theme === 'light' ? '浅色' : theme === 'dark' ? '深色' : '系统'}
-                  </button>
-                ))}
-              </div>
-            </SettingRow>
-
-            <div className="border-t border-gray-100 dark:border-gray-700" />
-
-            <SettingRow label="显示角标" description="在扩展图标上显示待签到数量">
-              <ToggleSwitch enabled={settings.showBadge} onToggle={handleBadgeToggle} />
-            </SettingRow>
+              <SettingRow label="显示角标" description="在扩展图标上显示待签到数量">
+                <ToggleSwitch enabled={settings.showBadge} onToggle={handleBadgeToggle} />
+              </SettingRow>
+            </div>
           </SectionCard>
 
           {/* Reminder Settings */}
+          <SectionCard
+            title="提醒设置"
+            description="配置签到提醒时间和通知"
+            icon={<BellIcon className="w-5 h-5" />}
+          >
+            <div className="space-y-1">
+              <SettingRow label="启用提醒" description="在指定时间发送签到提醒通知">
+                <ToggleSwitch enabled={settings.enabled} onToggle={handleReminderToggle} />
+              </SettingRow>
 
-          <SectionCard title="提醒设置" description="配置签到提醒时间和通知">
-            <SettingRow label="启用提醒" description="在指定时间发送签到提醒通知">
-              <ToggleSwitch enabled={settings.enabled} onToggle={handleReminderToggle} />
-            </SettingRow>
+              {settings.enabled && (
+                <>
+                  <SettingDivider className="!my-4" />
 
-            {settings.enabled && (
-              <>
-                <div className="border-t border-gray-100 dark:border-gray-700 my-4" />
-
-                <div className="space-y-4">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    提醒时间
-                  </label>
-
+                  {/* Reminder Times */}
                   <div className="space-y-3">
-                    {settings.times.map((time, index) => (
-                      <ReminderTimeEditor
-                        key={time.id}
-                        time={time}
-                        onChange={(t) => handleReminderTimeChange(index, t)}
-                        onRemove={() => handleRemoveReminderTime(index)}
-                        canRemove={settings.times.length > 1}
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      提醒时间
+                    </label>
 
-                      />
-                    ))}
+                    <div className="space-y-3">
+                      {settings.times.map((time, index) => (
+                        <ReminderTimeEditor
+                          key={time.id}
+                          time={time}
+                          onChange={(t) => handleReminderTimeChange(index, t)}
+                          onRemove={() => handleRemoveReminderTime(index)}
+                          canRemove={settings.times.length > 1}
+                        />
+                      ))}
+                    </div>
+
+                    <Button
+                      variant="outline"
+                      onClick={handleAddReminderTime}
+                      icon={<PlusIcon className="w-4 h-4" />}
+                      className="w-full"
+                    >
+                      添加提醒时间
+                    </Button>
                   </div>
 
-                  <button
-                    onClick={handleAddReminderTime}
-                    className="w-full py-2 px-4 text-sm font-medium text-primary-600 dark:text-primary-400 border border-dashed border-primary-300 dark:border-primary-700 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
-                  >
-                    + 添加提醒时间
-                  </button>
-                </div>
+                  <SettingDivider className="!my-4" />
 
+                  <SettingRow label="通知声音" description="提醒时播放通知声音">
+                    <ToggleSwitch enabled={settings.sound} onToggle={handleSoundToggle} />
+                  </SettingRow>
 
-                <div className="border-t border-gray-100 dark:border-gray-700 my-4" />
-
-                <SettingRow label="通知声音" description="提醒时播放通知声音">
-                  <ToggleSwitch enabled={settings.sound} onToggle={handleSoundToggle} />
-                </SettingRow>
-
-                <SettingRow label="稍后提醒" description={'点击"稍后提醒"后的延迟时间'}>
-                  <select
-                    value={settings.snoozeMinutes}
-                    onChange={(e) => handleSnoozeChange(Number(e.target.value))}
-                    className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
-                  >
-                    <option value={15}>15 分钟</option>
-                    <option value={30}>30 分钟</option>
-                    <option value={60}>1 小时</option>
-                    <option value={120}>2 小时</option>
-                  </select>
-                </SettingRow>
-              </>
-            )}
+                  <SettingRow label="稍后提醒" description={'点击"稍后提醒"后的延迟时间'}>
+                    <Select
+                      value={settings.snoozeMinutes}
+                      onChange={(e) => handleSnoozeChange(Number(e.target.value))}
+                    >
+                      <option value={15}>15 分钟</option>
+                      <option value={30}>30 分钟</option>
+                      <option value={60}>1 小时</option>
+                      <option value={120}>2 小时</option>
+                    </Select>
+                  </SettingRow>
+                </>
+              )}
+            </div>
           </SectionCard>
 
           {/* Auto-detect Settings */}
-          <SectionCard title="自动检测" description="配置自动访问检测行为">
+          <SectionCard
+            title="自动检测"
+            description="配置自动访问检测行为"
+            icon={<EyeIcon className="w-5 h-5" />}
+          >
             <SettingRow
               label="自动标记访问"
               description="访问已保存网站时自动标记为已访问（需网站开启自动检测）"
@@ -578,114 +515,81 @@ export default function App() {
           </SectionCard>
 
           {/* Daily Reset Settings */}
-          <SectionCard title="每日重置" description="配置每日状态重置时间">
+          <SectionCard
+            title="每日重置"
+            description="配置每日状态重置时间"
+            icon={<ClockIcon className="w-5 h-5" />}
+          >
             <SettingRow label="重置时间" description="每日重置签到状态的时间（24小时制）">
-              <select
+              <Select
                 value={settings.resetTime}
                 onChange={(e) => handleResetTimeChange(Number(e.target.value))}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
               >
                 {Array.from({ length: 24 }, (_, i) => (
                   <option key={i} value={i}>
                     {i.toString().padStart(2, '0')}:00
                   </option>
                 ))}
-              </select>
+              </Select>
             </SettingRow>
           </SectionCard>
 
           {/* Data Management */}
-          <SectionCard title="数据管理" description="管理保存的网站数据">
+          <SectionCard
+            title="数据管理"
+            description="管理保存的网站数据"
+            icon={<DatabaseIcon className="w-5 h-5" />}
+          >
             <div className="space-y-4">
+              {/* Site count info */}
               <div className="flex items-center justify-between py-2">
                 <div>
                   <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     已保存网站
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    共 {siteCount} 个网站
-                  </p>
-
+                  <p className="text-xs text-gray-500 dark:text-gray-400">共 {siteCount} 个网站</p>
+                </div>
+                <div className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                  {siteCount}
                 </div>
               </div>
 
+              {/* Action buttons */}
               <div className="flex flex-col sm:flex-row gap-3">
-                <button
-
+                <Button
+                  variant="warning"
                   onClick={() => setConfirmDialog({ type: 'reset' })}
                   disabled={siteCount === 0}
-                  className="flex-1 py-2 px-4 text-sm font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-
+                  className="flex-1"
                 >
                   重置今日状态
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="danger"
                   onClick={() => setConfirmDialog({ type: 'clear' })}
                   disabled={siteCount === 0}
-                  className="flex-1 py-2 px-4 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="flex-1"
                 >
                   清除所有网站
-                </button>
+                </Button>
               </div>
             </div>
-
           </SectionCard>
 
-          {/* Save Button */}
-          <div className="flex items-center justify-end gap-3 pt-4">
-            {saved && (
-              <span className="text-sm text-green-600 dark:text-green-400 flex items-center gap-1">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                已保存
-              </span>
-            )}
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="px-6 py-2.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center gap-2"
-            >
-              {saving ? (
-                <>
-                  <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      fill="none"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  保存中...
-                </>
-              ) : (
-                '保存设置'
-              )}
-            </button>
+          {/* Save Footer */}
+          <div className="flex items-center justify-end gap-3 pt-2 pb-4">
+            <Button variant="primary" size="lg" onClick={handleSave} loading={saving}>
+              {saving ? '保存中...' : '保存设置'}
+            </Button>
           </div>
         </div>
 
         {/* Footer */}
-
-        <footer className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
+        <footer className="mt-8 sm:mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
           <p className="text-sm text-gray-500 dark:text-gray-400">签到助手 v0.1.0</p>
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
             Never miss a daily check-in again!
           </p>
-
         </footer>
       </div>
 
@@ -698,6 +602,7 @@ export default function App() {
         onConfirm={handleClearAllSites}
         onCancel={() => setConfirmDialog({ type: null })}
         danger
+        icon="danger"
       />
 
       <ConfirmDialog
@@ -707,6 +612,15 @@ export default function App() {
         confirmText="确认重置"
         onConfirm={handleResetAllStatus}
         onCancel={() => setConfirmDialog({ type: null })}
+        icon="warning"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast?.message || ''}
+        type={toast?.type}
+        visible={!!toast}
+        onDismiss={() => setToast(null)}
       />
     </div>
   );

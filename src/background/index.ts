@@ -487,7 +487,7 @@ async function showReminderNotification(
   pendingCount: number,
   settings: ReminderSettings
 ): Promise<void> {
-  const notificationOptions: chrome.notifications.NotificationOptions = {
+  const notificationOptions: chrome.notifications.NotificationOptions<true> = {
     type: 'basic',
     iconUrl: chrome.runtime.getURL('icons/icon128.png'),
     title: '签到提醒',
@@ -498,7 +498,7 @@ async function showReminderNotification(
     buttons: [{ title: '📋 查看列表' }, { title: '⏰ 稍后提醒' }],
   };
 
-  await chrome.notifications.create(NOTIFICATION_IDS.CHECKIN_REMINDER, notificationOptions);
+  chrome.notifications.create(NOTIFICATION_IDS.CHECKIN_REMINDER, notificationOptions);
 }
 
 /**
@@ -507,7 +507,7 @@ async function showReminderNotification(
 async function showSiteVisitNotification(site: SiteEntry): Promise<void> {
   const notificationId = `${NOTIFICATION_IDS.SITE_VISIT_PREFIX}${site.id}`;
 
-  const notificationOptions: chrome.notifications.NotificationOptions = {
+  const notificationOptions: chrome.notifications.NotificationOptions<true> = {
     type: 'basic',
     iconUrl: site.favicon || chrome.runtime.getURL('icons/icon128.png'),
     title: `访问: ${site.title}`,
@@ -516,7 +516,7 @@ async function showSiteVisitNotification(site: SiteEntry): Promise<void> {
     buttons: [{ title: '✅ 标记已签到' }, { title: '👀 仅已访问' }],
   };
 
-  await chrome.notifications.create(notificationId, notificationOptions);
+  chrome.notifications.create(notificationId, notificationOptions);
 }
 
 /**
