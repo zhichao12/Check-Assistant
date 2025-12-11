@@ -537,7 +537,7 @@ export default function App() {
     <div className="w-[360px] min-h-[200px] max-h-[500px] flex flex-col bg-white dark:bg-gray-900 transition-colors">
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-        <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">签到助手</h1>
+        <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Clocky</h1>
         <div className="flex items-center gap-1">
           {/* Theme Toggle */}
           <button

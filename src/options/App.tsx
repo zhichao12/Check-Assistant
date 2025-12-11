@@ -407,7 +407,7 @@ export default function App() {
         {/* Header */}
         <header className="mb-6 sm:mb-8">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
-            签到助手设置
+            Clocky 设置
           </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             自定义您的签到提醒和偏好设置
@@ -586,7 +586,7 @@ export default function App() {
 
         {/* Footer */}
         <footer className="mt-8 sm:mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">签到助手 v0.1.0</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Clocky v0.1.0</p>
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
             Never miss a daily check-in again!
           </p>

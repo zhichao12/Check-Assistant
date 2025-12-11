@@ -1,4 +1,4 @@
-# 签到助手 (Check-in Assistant) - Chrome Extension Specification
+# Clocky（签到助手） - Chrome Extension Specification
 
 > **Version:** 1.0.0-draft  
 > **Last Updated:** December 2024  
@@ -25,7 +25,7 @@
 
 ### Overview
 
-**签到助手 (Check-in Assistant)** is a lightweight Chrome extension designed to help users track websites they need to visit regularly for check-ins, daily rewards, or routine tasks. Think of it as a focused bookmark manager specifically for sites requiring periodic visits.
+**Clocky（签到助手）** 是一款轻量级 Chrome 扩展，帮助用户跟踪需要定期访问的网站（签到、日常奖励或例行任务）。可以理解为专为周期访问场景定制的书签管理器。
 
 ### Problem Statement
 

@@ -22,7 +22,7 @@ export default defineManifest({
       '48': 'icons/icon48.png',
       '128': 'icons/icon128.png',
     },
-    default_title: '签到助手',
+    default_title: 'Clocky',
   },
   options_ui: {
     page: 'src/options/index.html',

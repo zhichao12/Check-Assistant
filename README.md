@@ -1,4 +1,4 @@
-# 签到助手 (Check-in Assistant)
+# Clocky（签到助手）
 
 > [中文文档](./README_CN.md)
 

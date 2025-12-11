@@ -1,6 +1,6 @@
 # Runtime Messaging Documentation
 
-This document describes the runtime messaging system used for communication between the different components of the 签到助手 Chrome extension.
+This document describes the runtime messaging system used for communication between the different components of the Clocky (签到助手) Chrome extension.
 
 ## Overview
 

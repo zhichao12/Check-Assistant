@@ -1,6 +1,6 @@
 {
   "name": "checkin-assistant",
-  "displayName": "签到助手 (Check-in Assistant)",
+  "displayName": "Clocky",
   "version": "0.1.0",
   "description": "A lightweight Chrome extension to track websites you need to visit regularly for check-ins, daily rewards, or routine tasks.",
   "type": "module",

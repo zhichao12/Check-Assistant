@@ -58,7 +58,7 @@ async function sendMessage<T>(message: Message): Promise<T | null> {
     return null;
   } catch (error) {
     // Extension context may be invalidated if extension was updated/reloaded
-    console.debug('[签到助手] Message send failed:', error);
+    console.debug('[Clocky] Message send failed:', error);
     return null;
   }
 }
@@ -117,10 +117,10 @@ async function processVisit(): Promise<void> {
 
     hasNotifiedVisit = true;
 
-    console.debug(`[签到助手] Visit recorded for: ${matchResult.siteName}`);
+    console.debug(`[Clocky] Visit recorded for: ${matchResult.siteName}`);
   } catch (error) {
     // Silently fail - content script errors shouldn't affect the page
-    console.debug('[签到助手] Failed to process visit:', error);
+    console.debug('[Clocky] Failed to process visit:', error);
   }
 }
 
@@ -200,7 +200,7 @@ function initialize(): void {
   // Handle tab visibility changes
   document.addEventListener('visibilitychange', handleVisibilityChange);
 
-  console.debug('[签到助手] Content script initialized');
+  console.debug('[Clocky] Content script initialized');
 }
 
 // Run initialization

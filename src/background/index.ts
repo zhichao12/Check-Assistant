@@ -2,7 +2,7 @@
  * Background Service Worker
  *
 
- * This service worker handles all background operations for the 签到助手 extension:
+ * This service worker handles all background operations for the Clocky extension:
  *
  * ## Responsibilities
  * - **Message Router**: Handle messages from popup and content scripts
@@ -53,7 +53,7 @@ import {
 // ============================================================================
 
 
-console.log('签到助手 Background Service Worker started');
+console.log('Clocky Background Service Worker started');
 
 // Listen to site changes to keep badge同步，避免前端直接写存储时角标不同步
 onSitesChange(async () => {

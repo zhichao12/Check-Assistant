@@ -1,4 +1,4 @@
-# 签到助手 (Check-in Assistant)
+# Clocky（签到助手）
 
 > [English Documentation](./README.md)
 
