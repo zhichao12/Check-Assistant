@@ -534,7 +534,7 @@ export default function App() {
                   <ToggleSwitch enabled={settings.sound} onToggle={handleSoundToggle} />
                 </SettingRow>
 
-                <SettingRow label="稍后提醒" description="点击"稍后提醒"后的延迟时间">
+                <SettingRow label="稍后提醒" description={'点击"稍后提醒"后的延迟时间'}>
                   <select
                     value={settings.snoozeMinutes}
                     onChange={(e) => handleSnoozeChange(Number(e.target.value))}
@@ -680,7 +680,7 @@ export default function App() {
       <ConfirmDialog
         isOpen={confirmDialog.type === 'reset'}
         title="重置今日状态？"
-        message="确定要重置所有网站的今日签到状态吗？这将清除所有"已访问"和"已签到"标记。"
+        message={'确定要重置所有网站的今日签到状态吗？这将清除所有"已访问"和"已签到"标记。'}
         confirmText="确认重置"
         onConfirm={handleResetAllStatus}
         onCancel={() => setConfirmDialog({ type: null })}
