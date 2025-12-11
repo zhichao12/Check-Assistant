@@ -6,11 +6,12 @@
  * - Alarm scheduling for reminders
  * - Chrome notifications
  * - Storage management
+ * - Badge count updates
  */
 
 import type { Message, MessageResponse, Site, Settings } from '@/shared/types';
 import { STORAGE_KEYS, DEFAULT_SETTINGS } from '@/shared/types';
-import { generateId } from '@/shared/utils';
+import { generateId, wasVisitedToday } from '@/shared/utils';
 
 // Log service worker startup
 console.log('签到助手 Background Service Worker started');
@@ -300,4 +301,43 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       [STORAGE_KEYS.SETTINGS]: DEFAULT_SETTINGS,
     });
   }
+  // Update badge on install/update
+  await updateBadge();
 });
+
+/**
+ * Update the badge count to show pending check-ins
+ */
+async function updateBadge(): Promise<void> {
+  try {
+    const result = await chrome.storage.sync.get([STORAGE_KEYS.SITES]);
+    const sites: Site[] = result[STORAGE_KEYS.SITES] || [];
+
+    // Count sites not visited today
+    const pendingCount = sites.filter((site) => !wasVisitedToday(site.lastVisitedAt)).length;
+
+    // Only show badge if there are pending items
+    if (pendingCount > 0) {
+      await chrome.action.setBadgeText({ text: String(pendingCount) });
+      await chrome.action.setBadgeBackgroundColor({ color: '#F59E0B' }); // Amber color
+    } else {
+      await chrome.action.setBadgeText({ text: '' });
+    }
+  } catch (error) {
+    console.error('Failed to update badge:', error);
+  }
+}
+
+/**
+ * Listen for storage changes to update badge
+ */
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === 'sync' && changes[STORAGE_KEYS.SITES]) {
+    updateBadge();
+  }
+});
+
+/**
+ * Update badge on service worker startup
+ */
+updateBadge();

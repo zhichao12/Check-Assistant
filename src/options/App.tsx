@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { Settings, Message, MessageResponse } from '@/shared/types';
 import { DEFAULT_SETTINGS } from '@/shared/types';
+import { useTheme } from '@/shared/useTheme';
 
 /**
  * Send message to background script
@@ -18,12 +19,10 @@ export default function App() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // Load settings on mount
-  useEffect(() => {
-    loadSettings();
-  }, []);
+  // Initialize theme
+  useTheme();
 
-  async function loadSettings() {
+  const loadSettings = useCallback(async () => {
     try {
       const response = await sendMessage<Settings>({ type: 'GET_SETTINGS' });
       if (response.success && response.data) {
@@ -34,7 +33,12 @@ export default function App() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  // Load settings on mount
+  useEffect(() => {
+    loadSettings();
+  }, [loadSettings]);
 
   async function handleSave() {
     setSaving(true);
@@ -104,28 +108,28 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">加载中...</p>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <p className="text-gray-500 dark:text-gray-400">加载中...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-2xl mx-auto py-8 px-4">
         {/* Header */}
         <header className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">签到助手设置</h1>
-          <p className="text-gray-600 mt-1">自定义您的签到提醒和偏好设置</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">签到助手设置</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">自定义您的签到提醒和偏好设置</p>
         </header>
 
         {/* Settings Form */}
         <div className="space-y-6">
           {/* Theme Settings */}
           <section className="card">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">外观</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">外观</h2>
             <div className="space-y-3">
-              <label className="text-sm font-medium text-gray-700">主题</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">主题</label>
               <div className="flex gap-3">
                 {(['light', 'dark', 'system'] as const).map((theme) => (
                   <button
@@ -134,7 +138,7 @@ export default function App() {
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       settings.theme === theme
                         ? 'bg-primary-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
                     }`}
                   >
                     {theme === 'light' ? '浅色' : theme === 'dark' ? '深色' : '跟随系统'}
@@ -146,18 +150,18 @@ export default function App() {
 
           {/* Reminder Settings */}
           <section className="card">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">提醒</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">提醒</h2>
             <div className="space-y-4">
               {/* Enable Reminders */}
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-sm font-medium text-gray-700">启用提醒</label>
-                  <p className="text-xs text-gray-500">在指定时间提醒您签到</p>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">启用提醒</label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">在指定时间提醒您签到</p>
                 </div>
                 <button
                   onClick={() => handleReminderToggle(!settings.reminder.enabled)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    settings.reminder.enabled ? 'bg-primary-600' : 'bg-gray-200'
+                    settings.reminder.enabled ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-600'
                   }`}
                 >
                   <span
@@ -170,8 +174,8 @@ export default function App() {
 
               {/* Reminder Times */}
               {settings.reminder.enabled && (
-                <div className="space-y-3 pt-3 border-t border-gray-100">
-                  <label className="text-sm font-medium text-gray-700">提醒时间</label>
+                <div className="space-y-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">提醒时间</label>
                   {settings.reminder.times.map((time, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <input
@@ -212,15 +216,15 @@ export default function App() {
               )}
 
               {/* Enable Notifications */}
-              <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+              <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
                 <div>
-                  <label className="text-sm font-medium text-gray-700">桌面通知</label>
-                  <p className="text-xs text-gray-500">显示桌面通知提醒</p>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">桌面通知</label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">显示桌面通知提醒</p>
                 </div>
                 <button
                   onClick={() => handleNotificationsToggle(!settings.notificationsEnabled)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    settings.notificationsEnabled ? 'bg-primary-600' : 'bg-gray-200'
+                    settings.notificationsEnabled ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-600'
                   }`}
                 >
                   <span
@@ -235,16 +239,16 @@ export default function App() {
 
           {/* Auto-detect Settings */}
           <section className="card">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">自动检测</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">自动检测</h2>
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-sm font-medium text-gray-700">自动检测访问</label>
-                <p className="text-xs text-gray-500">访问已保存网站时自动标记为已签到</p>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">自动检测访问</label>
+                <p className="text-xs text-gray-500 dark:text-gray-400">访问已保存网站时自动标记为已签到</p>
               </div>
               <button
                 onClick={() => handleAutoDetectToggle(!settings.autoDetectVisits)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  settings.autoDetectVisits ? 'bg-primary-600' : 'bg-gray-200'
+                  settings.autoDetectVisits ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-600'
                 }`}
               >
                 <span
@@ -258,7 +262,7 @@ export default function App() {
 
           {/* Save Button */}
           <div className="flex items-center justify-end gap-3">
-            {saved && <span className="text-sm text-success-600">✓ 已保存</span>}
+            {saved && <span className="text-sm text-success-600 dark:text-success-400">✓ 已保存</span>}
             <button
               onClick={handleSave}
               disabled={saving}
@@ -270,7 +274,7 @@ export default function App() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-12 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
+        <footer className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-center text-sm text-gray-500 dark:text-gray-400">
           <p>签到助手 v0.1.0</p>
           <p className="mt-1">Never miss a daily check-in again!</p>
         </footer>

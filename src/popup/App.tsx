@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Site, Message, MessageResponse } from '@/shared/types';
 import { wasVisitedToday, getFaviconUrl } from '@/shared/utils';
+import { useTheme } from '@/shared/useTheme';
 
 /**
  * Send message to background script
@@ -16,6 +17,9 @@ export default function App() {
   const [sites, setSites] = useState<Site[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentTab, setCurrentTab] = useState<chrome.tabs.Tab | null>(null);
+
+  // Initialize theme
+  useTheme();
 
   // Load sites and current tab on mount
   useEffect(() => {
@@ -106,13 +110,13 @@ export default function App() {
   const completedCount = sites.length - pendingCount;
 
   return (
-    <div className="w-[360px] min-h-[200px] max-h-[500px] flex flex-col bg-white">
+    <div className="w-[360px] min-h-[200px] max-h-[500px] flex flex-col bg-white dark:bg-gray-900">
       {/* Header */}
-      <header className="flex items-center justify-between p-4 border-b border-gray-100">
-        <h1 className="text-lg font-semibold text-gray-900">签到助手</h1>
+      <header className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
+        <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">签到助手</h1>
         <button
           onClick={handleOpenOptions}
-          className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+          className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 rounded-md transition-colors"
           title="设置"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,27 +137,27 @@ export default function App() {
       </header>
 
       {/* Status Bar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 text-sm">
-        <span className="text-gray-600">
+      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-800 text-sm">
+        <span className="text-gray-600 dark:text-gray-400">
           今日进度:{' '}
-          <span className="font-medium text-primary-600">
+          <span className="font-medium text-primary-600 dark:text-primary-400">
             {completedCount}/{sites.length}
           </span>
         </span>
         {pendingCount > 0 && (
-          <span className="text-amber-600 font-medium">{pendingCount} 个待签到</span>
+          <span className="text-amber-600 dark:text-amber-400 font-medium">{pendingCount} 个待签到</span>
         )}
       </div>
 
       {/* Quick Add Button */}
       {currentTab?.url && !currentTab.url.startsWith('chrome://') && (
-        <div className="p-4 border-b border-gray-100">
+        <div className="p-4 border-b border-gray-100 dark:border-gray-800">
           <button
             onClick={handleSaveCurrentSite}
             disabled={isCurrentSiteSaved}
             className={`w-full py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               isCurrentSiteSaved
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed'
                 : 'bg-primary-600 text-white hover:bg-primary-700'
             }`}
           >
@@ -165,10 +169,10 @@ export default function App() {
       {/* Site List */}
       <div className="flex-1 overflow-y-auto">
         {loading ? (
-          <div className="flex items-center justify-center py-8 text-gray-500">加载中...</div>
+          <div className="flex items-center justify-center py-8 text-gray-500 dark:text-gray-400">加载中...</div>
         ) : sites.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-8 text-gray-500">
-            <svg className="w-12 h-12 mb-2 text-gray-300" fill="none" viewBox="0 0 24 24">
+          <div className="flex flex-col items-center justify-center py-8 text-gray-500 dark:text-gray-400">
+            <svg className="w-12 h-12 mb-2 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24">
               <path
                 stroke="currentColor"
                 strokeLinecap="round"
@@ -178,16 +182,16 @@ export default function App() {
               />
             </svg>
             <p className="text-sm">还没有添加任何网站</p>
-            <p className="text-xs text-gray-400 mt-1">点击上方按钮添加当前网站</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">点击上方按钮添加当前网站</p>
           </div>
         ) : (
-          <ul className="divide-y divide-gray-100">
+          <ul className="divide-y divide-gray-100 dark:divide-gray-800">
             {sites.map((site) => {
               const isVisitedToday = wasVisitedToday(site.lastVisitedAt);
               return (
                 <li
                   key={site.id}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
                   {/* Favicon */}
                   <img
@@ -203,7 +207,7 @@ export default function App() {
                   {/* Site Info */}
                   <div className="flex-1 min-w-0">
                     <p
-                      className={`text-sm truncate ${isVisitedToday ? 'text-gray-400' : 'text-gray-900'}`}
+                      className={`text-sm truncate ${isVisitedToday ? 'text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100'}`}
                     >
                       {site.title}
                     </p>
@@ -214,7 +218,7 @@ export default function App() {
                     {/* Open Site */}
                     <button
                       onClick={() => handleOpenSite(site.url)}
-                      className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded transition-colors"
                       title="打开网站"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -233,7 +237,7 @@ export default function App() {
                       className={`p-1.5 rounded transition-colors ${
                         isVisitedToday
                           ? 'text-success-500 bg-success-500/10'
-                          : 'text-gray-400 hover:text-success-600 hover:bg-success-50'
+                          : 'text-gray-400 hover:text-success-600 hover:bg-success-50 dark:hover:bg-success-900/20'
                       }`}
                       title={isVisitedToday ? '今日已签到' : '标记为已签到'}
                     >
@@ -250,7 +254,7 @@ export default function App() {
                     {/* Delete */}
                     <button
                       onClick={() => handleDeleteSite(site.id)}
-                      className="p-1.5 text-gray-400 hover:text-error-500 hover:bg-error-500/10 rounded transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-error-500 hover:bg-error-500/10 dark:hover:bg-error-900/20 rounded transition-colors"
                       title="删除"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
