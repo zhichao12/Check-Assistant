@@ -1,78 +1,231 @@
 # 签到助手 (Check-in Assistant)
 
-轻量级 Chrome 扩展，帮你管理需要定期访问/签到的网站，支持提醒、标记状态与快捷跳转。
+> [中文文档](./README_CN.md)
 
-## 快速开始
+[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-green?logo=googlechrome)](https://chrome.google.com)
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue)](https://developer.chrome.com/docs/extensions/mv3/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 
-### 环境要求
-- Node.js 18+
-- npm
+A lightweight Chrome extension designed to help you track websites that require regular visits for check-ins, daily rewards, or routine tasks. Think of it as a focused bookmark manager specifically for sites requiring periodic visits.
 
-### 安装与启动
+## ✨ Key Features
+
+- **Quick Save** – Add the current tab as a check-in site with one click, automatically extracting favicon and hostname
+- **Status Tracking** – Mark sites as "Visited" or "Checked In" with clear visual indicators
+- **Badge Counter** – Extension badge displays the number of pending check-ins at a glance
+- **Scheduled Reminders** – Set daily reminder times using Chrome Alarms & Notifications
+- **Snooze Support** – "Remind me later" option for flexible reminder handling
+- **Auto-Detection** – Content script detects visits to saved sites and prompts to mark status
+- **Theme Switching** – Choose Light, Dark, or System-based appearance
+- **One-Click Reset** – Reset all daily statuses to start fresh
+
+## 📸 Screenshots
+
+<!-- TODO: Add screenshots of the extension in action -->
+| Popup View | Options Page |
+|------------|--------------|
+| _Screenshot placeholder_ | _Screenshot placeholder_ |
+
+## 🚀 Installation
+
+### Prerequisites
+
+- **Node.js** >= 18.0.0
+- **npm** (included with Node.js)
+
+### Install Dependencies
+
 ```bash
 npm install
-npm run dev
 ```
-`npm run dev` 会启动 Vite 开发服务器并构建到 `dist`，用于在 Chrome 的“加载已解压的扩展程序”中调试。
 
-### 生产构建
+### Build for Production
+
 ```bash
 npm run build
 ```
-输出在 `dist`，直接用于打包/上架。
 
-### 在 Chrome 加载
-1. 打开 `chrome://extensions/`，开启“开发者模式”
-2. 点击“加载已解压的扩展程序”，选择 `dist` 目录
-3. 需要时点击扩展卡片的刷新按钮同步最新代码
+The production build is output to the `dist/` directory.
 
-## 项目结构
+## 📦 Loading the Extension in Chrome
+
+1. Open Chrome and navigate to `chrome://extensions/`
+2. Enable **Developer mode** using the toggle in the top-right corner
+3. Click **Load unpacked**
+4. Select the `dist/` folder from this project
+5. The extension icon should appear in your browser toolbar
+
+> **Tip:** After making changes, click the refresh icon on the extension card in `chrome://extensions/` to reload the latest build.
+
+## 📖 Usage Guide
+
+### Popup Interface
+
+The popup is the primary interface for managing your check-in sites:
+
+1. **Add Current Site** – Click the extension icon while on any website, then click the "Add Current Page" button
+2. **Manual Add** – Click the "+" button to manually enter a URL and optional title
+3. **Mark Status** – Use the eye icon (👁) to mark as visited, or the checkmark (✓) to mark as checked in
+4. **Open Site** – Click the site title to navigate directly to it
+5. **Delete Site** – Click the trash icon to remove a site from your list
+6. **Toggle Theme** – Click the sun/moon icon in the header to switch themes
+
+### Options Page
+
+Access the Options page by right-clicking the extension icon and selecting "Options", or click the gear icon in the popup:
+
+- **Appearance** – Choose Light, Dark, or System theme; toggle badge visibility
+- **Reminder Settings** – Enable/disable reminders, configure multiple reminder times with day-of-week selection
+- **Notification Sound** – Toggle audio alerts for reminders
+- **Snooze Duration** – Set how long "Remind me later" delays the next notification
+- **Auto-Detection** – Enable automatic visit detection when browsing saved sites
+- **Daily Reset Time** – Configure when daily statuses should reset
+- **Data Management** – Clear all sites or reset today's status in bulk
+
+## 🛠 Development Setup
+
+### Environment Requirements
+
+| Tool        | Version   |
+|-------------|-----------|
+| Node.js     | >= 18.0.0 |
+| npm         | >= 8.0.0  |
+
+### Available Scripts
+
+| Command                  | Description                             |
+|--------------------------|-----------------------------------------|
+| `npm run dev`            | Start Vite dev server with HMR          |
+| `npm run build`          | TypeScript compile + production build   |
+| `npm run preview`        | Preview the production build locally    |
+| `npm run lint`           | Run ESLint checks                       |
+| `npm run lint:fix`       | Run ESLint and auto-fix issues          |
+| `npm run format`         | Format code with Prettier               |
+| `npm run format:check`   | Check code formatting without changes   |
+| `npm run typecheck`      | Run TypeScript type checking            |
+| `npm run test`           | Run Vitest unit tests                   |
+| `npm run test:watch`     | Run tests in watch mode                 |
+
+### Development Workflow
+
+```bash
+# Start the development server
+npm run dev
+
+# In Chrome, load the dist/ folder as an unpacked extension
+# Changes will hot-reload automatically (popup/options pages)
+
+# Run checks before committing
+npm run lint && npm run typecheck && npm run test
 ```
-src/
-  background/     # Service Worker
-  popup/          # 弹窗 React 应用
-  options/        # 设置页 React 应用
-  content/        # 内容脚本
-  shared/         # 公共类型与工具
-  lib/            # 存储与业务逻辑
-  styles/         # 全局样式
-  __tests__/      # 测试
-  manifest.ts     # MV3 清单入口
-public/           # 静态资源与图标
-docs/             # 规格与说明
-dist/             # 构建输出（忽略提交）
+
+## 📁 Project Structure
+
+```plaintext
+checkin-assistant/
+├── public/
+│   └── icons/              # Extension icons (16, 32, 48, 128 px)
+├── src/
+│   ├── background/
+│   │   └── index.ts        # Service Worker (alarms, notifications, messaging)
+│   ├── popup/
+│   │   ├── index.html      # Popup entry HTML
+│   │   ├── main.tsx        # React entry point
+│   │   └── App.tsx         # Main popup component
+│   ├── options/
+│   │   ├── index.html      # Options page entry HTML
+│   │   ├── main.tsx        # React entry point
+│   │   ├── App.tsx         # Main options component
+│   │   └── components/     # Reusable UI components
+│   ├── content/
+│   │   └── index.ts        # Content script for visit detection
+│   ├── lib/
+│   │   ├── storage.ts      # Chrome Storage API wrapper & data models
+│   │   ├── hooks/          # Custom React hooks (useStorage)
+│   │   └── index.ts        # Lib exports
+│   ├── shared/
+│   │   ├── types.ts        # Shared TypeScript types & interfaces
+│   │   └── utils.ts        # Utility functions
+│   ├── styles/
+│   │   └── globals.css     # Tailwind CSS & global styles
+│   ├── __tests__/          # Unit tests (Vitest)
+│   ├── manifest.ts         # Extension manifest (MV3) definition
+│   └── vite-env.d.ts       # Vite environment types
+├── docs/
+│   └── spec.md             # Product specification document
+├── .eslintrc.cjs           # ESLint configuration
+├── .prettierrc             # Prettier configuration
+├── tailwind.config.js      # Tailwind CSS configuration
+├── tsconfig.json           # TypeScript configuration
+├── vite.config.ts          # Vite build configuration
+├── vitest.config.ts        # Vitest test configuration
+└── package.json            # Project dependencies & scripts
 ```
 
-## 常用脚本
-| 命令 | 说明 |
-| --- | --- |
-| `npm run dev` | 开发模式，HMR |
-| `npm run build` | 生产构建 |
-| `npm run preview` | 本地预览生产包 |
-| `npm run lint` / `lint:fix` | ESLint 检查/修复 |
-| `npm run format` / `format:check` | Prettier 格式化/校验 |
-| `npm run typecheck` | TypeScript 类型检查 |
-| `npm run test` / `test:watch` | Vitest 单测/监听 |
+## 🧰 Tech Stack
 
-## 技术栈
-- React 18 + TypeScript + Vite（@crxjs/vite-plugin）
-- Tailwind CSS
-- Zustand 状态管理
-- Vitest + jsdom 测试
-- ESLint + Prettier 规范
+| Category         | Technology                                                 |
+|------------------|------------------------------------------------------------|
+| Extension API    | Chrome Extension Manifest V3                               |
+| UI Framework     | React 18 + TypeScript                                      |
+| Build Tool       | Vite + [@crxjs/vite-plugin](https://crxjs.dev/vite-plugin) |
+| Styling          | Tailwind CSS                                               |
+| State Management | Zustand                                                    |
+| Testing          | Vitest + jsdom                                             |
+| Linting          | ESLint + Prettier                                          |
+| Storage          | Chrome Storage Sync API                                    |
 
-## 功能概览
-- 添加/管理待签到网站，自动提取 favicon/hostname
-- 标记“已访问”“已签到”，支持一键重置今日状态
-- 扩展角标显示待签到数量
-- 定时提醒（Chrome Alarms + Notifications），可稍后提醒
-- 自动检测访问（内容脚本）并提示标记
-- 主题切换（浅色/深色/跟随系统）
+## 🌐 Localization
 
-## 开发者提示
-- Node 版本≥18，避免提交 `dist` 与临时文件
-- 修改 `manifest.ts` 权限时遵循最小权限原则
-- 提交前至少运行 `npm run lint && npm run test`
+This project provides documentation in both English and Chinese:
 
-## 贡献
-欢迎提交 Issue/PR。推荐使用类似 Conventional Commits 的提交信息（如 `feat: ...`、`fix: ...`），PR 请说明改动内容、动机与测试结果。 ***!
+- **English** – You are reading it
+- **Chinese** – See [README_CN.md](./README_CN.md)
+
+The extension UI is currently available in Chinese. Contributions for additional language support are welcome.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+### Before Submitting
+
+1. **Fork** the repository and create a feature branch
+2. **Install** dependencies: `npm install`
+3. **Run checks** before committing:
+
+   ```bash
+   npm run lint        # Check for linting errors
+   npm run typecheck   # Verify TypeScript types
+   npm run test        # Run unit tests
+   npm run format      # Format code
+   ```
+
+4. Ensure all checks pass with no errors
+
+### Commit Messages
+
+We recommend using [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+- `feat: add new feature`
+- `fix: resolve bug in popup`
+- `docs: update README`
+- `style: format code`
+- `refactor: restructure storage module`
+- `test: add unit tests for utils`
+
+### Pull Request Guidelines
+
+- Provide a clear description of the changes and motivation
+- Reference any related issues
+- Include screenshots for UI changes
+- Ensure CI checks pass
+
+## 📄 License
+
+This project is open source. See the repository for license details.
+
+---
+
+Made with ❤️ for productivity enthusiasts
