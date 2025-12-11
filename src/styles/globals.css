@@ -4,8 +4,15 @@
 
 @layer base {
   html {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-      Arial, sans-serif;
+    font-family:
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
   }
 
   body {
@@ -14,6 +21,38 @@
 
   .dark body {
     @apply bg-gray-900 text-gray-100;
+  }
+
+  /* Smooth theme transitions */
+  html {
+    transition:
+      background-color 0.15s ease-in-out,
+      color 0.15s ease-in-out;
+  }
+
+  /* Popup specific scrollbar styles */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-gray-600;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
   }
 }
 
@@ -47,5 +86,78 @@
     @apply w-full rounded-md border border-gray-300 px-3 py-2 text-sm;
     @apply focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500;
     @apply dark:border-gray-600 dark:bg-gray-700 dark:text-white;
+  }
+
+  /* Status pills */
+  .status-pill {
+    @apply inline-flex items-center px-1.5 py-0.5 text-xs font-medium rounded;
+  }
+
+  .status-pill-visited {
+    @apply status-pill bg-blue-100 text-blue-700;
+    @apply dark:bg-blue-900/30 dark:text-blue-400;
+  }
+
+  .status-pill-checked {
+    @apply status-pill bg-emerald-100 text-emerald-700;
+    @apply dark:bg-emerald-900/30 dark:text-emerald-400;
+  }
+
+  /* Action buttons */
+  .action-btn {
+    @apply p-1.5 rounded transition-colors;
+    @apply text-gray-400;
+  }
+
+  .action-btn:hover {
+    @apply text-gray-600;
+    @apply dark:text-gray-300;
+  }
+
+  .action-btn-primary:hover {
+    @apply text-primary-600 bg-primary-50;
+    @apply dark:text-primary-400 dark:bg-primary-900/20;
+  }
+
+  .action-btn-success:hover {
+    @apply text-emerald-600 bg-emerald-50;
+    @apply dark:text-emerald-400 dark:bg-emerald-900/20;
+  }
+
+  .action-btn-danger:hover {
+    @apply text-red-500 bg-red-50;
+    @apply dark:text-red-400 dark:bg-red-900/20;
+  }
+
+  /* Loading skeleton animation */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .skeleton {
+    @apply bg-gray-200 dark:bg-gray-700;
+    background: linear-gradient(
+      90deg,
+      theme('colors.gray.200') 25%,
+      theme('colors.gray.100') 50%,
+      theme('colors.gray.200') 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .dark .skeleton {
+    background: linear-gradient(
+      90deg,
+      theme('colors.gray.700') 25%,
+      theme('colors.gray.600') 50%,
+      theme('colors.gray.700') 75%
+    );
+    background-size: 200% 100%;
   }
 }
