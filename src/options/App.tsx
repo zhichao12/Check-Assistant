@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+
 import type { Message, MessageResponse } from '@/shared/types';
 import {
   type ReminderSettings,
@@ -11,6 +12,7 @@ import { generateId } from '@/shared/utils';
 // ============================================================================
 // Messaging Utilities
 // ============================================================================
+
 
 /**
  * Send message to background script
@@ -258,6 +260,7 @@ export default function App() {
     type: 'clear' | 'reset' | null;
   }>({ type: null });
 
+
   // Load settings and site count on mount
   useEffect(() => {
     loadData();
@@ -269,6 +272,7 @@ export default function App() {
   }, [settings.theme]);
 
   async function loadData() {
+
     try {
       setLoading(true);
       setError(null);
@@ -291,7 +295,12 @@ export default function App() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  // Load settings on mount
+  useEffect(() => {
+    loadSettings();
+  }, [loadSettings]);
 
   function applyTheme(theme: ThemePreference) {
     const isDark =
@@ -425,16 +434,20 @@ export default function App() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto mb-4"></div>
           <p className="text-gray-500 dark:text-gray-400">加载中...</p>
         </div>
+
       </div>
     );
   }
 
   return (
+
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+
       <div className="max-w-2xl mx-auto py-8 px-4">
         {/* Header */}
         <header className="mb-8">
@@ -467,9 +480,11 @@ export default function App() {
         {/* Settings Sections */}
         <div className="space-y-6">
           {/* Theme Settings */}
+
           <SectionCard title="外观" description="自定义应用外观">
             <SettingRow label="主题" description="选择浅色、深色或跟随系统设置">
               <div className="flex gap-2">
+
                 {(['light', 'dark', 'system'] as const).map((theme) => (
                   <button
                     key={theme}
@@ -477,7 +492,9 @@ export default function App() {
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       settings.theme === theme
                         ? 'bg-primary-600 text-white'
+
                         : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+
                     }`}
                   >
                     {theme === 'light' ? '浅色' : theme === 'dark' ? '深色' : '系统'}
@@ -494,6 +511,7 @@ export default function App() {
           </SectionCard>
 
           {/* Reminder Settings */}
+
           <SectionCard title="提醒设置" description="配置签到提醒时间和通知">
             <SettingRow label="启用提醒" description="在指定时间发送签到提醒通知">
               <ToggleSwitch enabled={settings.enabled} onToggle={handleReminderToggle} />
@@ -516,6 +534,7 @@ export default function App() {
                         onChange={(t) => handleReminderTimeChange(index, t)}
                         onRemove={() => handleRemoveReminderTime(index)}
                         canRemove={settings.times.length > 1}
+
                       />
                     ))}
                   </div>
@@ -527,6 +546,7 @@ export default function App() {
                     + 添加提醒时间
                   </button>
                 </div>
+
 
                 <div className="border-t border-gray-100 dark:border-gray-700 my-4" />
 
@@ -588,14 +608,17 @@ export default function App() {
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     共 {siteCount} 个网站
                   </p>
+
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
+
                   onClick={() => setConfirmDialog({ type: 'reset' })}
                   disabled={siteCount === 0}
                   className="flex-1 py-2 px-4 text-sm font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+
                 >
                   重置今日状态
                 </button>
@@ -608,6 +631,7 @@ export default function App() {
                 </button>
               </div>
             </div>
+
           </SectionCard>
 
           {/* Save Button */}
@@ -658,11 +682,13 @@ export default function App() {
         </div>
 
         {/* Footer */}
+
         <footer className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
           <p className="text-sm text-gray-500 dark:text-gray-400">签到助手 v0.1.0</p>
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
             Never miss a daily check-in again!
           </p>
+
         </footer>
       </div>
 

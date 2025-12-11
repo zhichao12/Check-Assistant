@@ -1,6 +1,8 @@
+
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useStorage } from '@/lib/hooks/useStorage';
 import type { SiteEntry, ThemePreference, AddSiteInput } from '@/lib/storage';
+
 
 /**
  * Theme hook that syncs with storage and applies to document
@@ -10,6 +12,7 @@ function useTheme(
   updateTheme: (theme: ThemePreference) => Promise<void>
 ) {
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
+
 
   useEffect(() => {
     const applyTheme = () => {
@@ -132,6 +135,7 @@ function StatusPill({ type, active }: StatusPillProps) {
   const { label, className } = config[type];
 
   return (
+
     <span
       className={`inline-flex items-center px-1.5 py-0.5 text-xs font-medium rounded ${className}`}
     >
@@ -207,6 +211,7 @@ function SiteItem({
           onClick={() => onOpen(site.url)}
           className="p-1.5 text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded transition-colors"
           title="打开网站"
+
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -245,6 +250,7 @@ function SiteItem({
           </svg>
         </button>
 
+
         {/* Mark Checked In */}
         <button
           onClick={() => onMarkCheckedIn(site.id)}
@@ -276,6 +282,7 @@ function SiteItem({
             />
           </svg>
         </button>
+
       </div>
     </li>
   );
@@ -301,6 +308,7 @@ function InlineAddForm({ onSubmit, onCancel }: InlineAddFormProps) {
     if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
       normalizedUrl = 'https://' + normalizedUrl;
     }
+
 
     onSubmit({
       title: title.trim() || normalizedUrl,
@@ -516,6 +524,7 @@ export default function App() {
             onClick={toggleTheme}
             className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
             title={resolvedTheme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
+
           >
             {resolvedTheme === 'dark' ? (
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -578,6 +587,7 @@ export default function App() {
           )}
         </div>
       )}
+
 
       {/* Error Banner */}
       {error && (
@@ -649,6 +659,7 @@ export default function App() {
             className="w-full py-2 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors flex items-center justify-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -656,6 +667,7 @@ export default function App() {
                 d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
               />
             </svg>
+
             手动输入网址
           </button>
         </div>
@@ -682,6 +694,7 @@ export default function App() {
                 isOptimisticUpdate={optimisticIds.has(site.id)}
               />
             ))}
+
           </ul>
         )}
       </div>

@@ -1,6 +1,7 @@
 /**
  * Background Service Worker
  *
+
  * This service worker handles all background operations for the 签到助手 extension:
  *
  * ## Responsibilities
@@ -49,6 +50,7 @@ import {
 // ============================================================================
 // Service Worker Initialization
 // ============================================================================
+
 
 console.log('签到助手 Background Service Worker started');
 
@@ -631,6 +633,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     console.log('[Background] Extension updated from version:', details.previousVersion);
   }
 
+
   // Configure reminders based on saved settings
   const settings = await getSettings();
   await configureReminders(settings);
@@ -680,3 +683,4 @@ async function setupDailyResetAlarm(settings: ReminderSettings): Promise<void> {
 
   console.log(`[Background] Daily reset alarm set for ${resetTime.toLocaleString()}`);
 }
+
