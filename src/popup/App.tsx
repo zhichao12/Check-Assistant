@@ -60,18 +60,18 @@ function useTheme(
  */
 function SiteListSkeleton() {
   return (
-    <div className="divide-y divide-gray-100 dark:divide-gray-700">
+    <div className="p-4 space-y-3">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="flex items-center gap-3 px-4 py-3 animate-pulse">
-          <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded" />
+        <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl neo-inset animate-pulse">
+          <div className="w-5 h-5 skeleton rounded" />
           <div className="flex-1 space-y-2">
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-            <div className="h-3 bg-gray-100 dark:bg-gray-800 rounded w-1/2" />
+            <div className="h-4 skeleton rounded w-3/4" />
+            <div className="h-3 skeleton rounded w-1/2" />
           </div>
           <div className="flex gap-1">
-            <div className="w-6 h-6 bg-gray-100 dark:bg-gray-800 rounded" />
-            <div className="w-6 h-6 bg-gray-100 dark:bg-gray-800 rounded" />
-            <div className="w-6 h-6 bg-gray-100 dark:bg-gray-800 rounded" />
+            <div className="w-6 h-6 skeleton rounded" />
+            <div className="w-6 h-6 skeleton rounded" />
+            <div className="w-6 h-6 skeleton rounded" />
           </div>
         </div>
       ))}
@@ -85,7 +85,7 @@ function SiteListSkeleton() {
 function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-      <div className="w-16 h-16 mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+      <div className="w-16 h-16 mb-4 rounded-full neo-inset flex items-center justify-center">
         <svg
           className="w-8 h-8 text-gray-400 dark:text-gray-500"
           fill="none"
@@ -124,11 +124,11 @@ function StatusPill({ type, active }: StatusPillProps) {
   const config = {
     visited: {
       label: '已访问',
-      className: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+      className: 'neo-chip-inset text-blue-700 dark:text-blue-400',
     },
     checkedIn: {
       label: '已签到',
-      className: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+      className: 'neo-chip-inset text-emerald-700 dark:text-emerald-400',
     },
   };
 
@@ -169,7 +169,7 @@ function SiteItem({
 
   return (
     <li
-      className={`flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${
+      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl neo-surface hover:shadow-neo-in-sm transition-all ${
         isOptimisticUpdate ? 'opacity-70' : ''
       }`}
     >
@@ -211,10 +211,10 @@ function SiteItem({
         {/* Mark Visited */}
         <button
           onClick={() => onMarkVisited(site.id)}
-          className={`p-1.5 rounded transition-colors ${
+          className={`p-1.5 rounded neo-chip transition-all ${
             site.visitedStatus
-              ? 'text-blue-500 bg-blue-500/10'
-              : 'text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+              ? 'neo-chip-inset text-blue-600'
+              : 'text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 hover:shadow-neo-in-sm'
           }`}
           title={site.visitedStatus ? '今日已访问' : '标记为已访问'}
           disabled={site.visitedStatus}
@@ -239,10 +239,10 @@ function SiteItem({
         {/* Mark Checked In */}
         <button
           onClick={() => onMarkCheckedIn(site.id)}
-          className={`p-1.5 rounded transition-colors ${
+          className={`p-1.5 rounded neo-chip transition-all ${
             site.checkedInStatus
-              ? 'text-emerald-500 bg-emerald-500/10'
-              : 'text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20'
+              ? 'neo-chip-inset text-emerald-600'
+              : 'text-gray-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:shadow-neo-in-sm'
           }`}
           title={site.checkedInStatus ? '今日已签到' : '标记为已签到'}
           disabled={site.checkedInStatus}
@@ -255,7 +255,7 @@ function SiteItem({
         {/* Delete */}
         <button
           onClick={() => onDelete(site.id)}
-          className="p-1.5 text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+          className="p-1.5 rounded neo-chip text-gray-500 hover:text-red-500 dark:hover:text-red-400 hover:shadow-neo-in-sm transition-all"
           title="删除"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -307,7 +307,7 @@ function InlineAddForm({ onSubmit, onCancel }: InlineAddFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-4 border-b border-gray-100 dark:border-gray-700 space-y-3"
+      className="p-4 space-y-3 neo-inset"
     >
       <div>
         <input
@@ -315,7 +315,7 @@ function InlineAddForm({ onSubmit, onCancel }: InlineAddFormProps) {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="输入网址 (如 example.com)"
-          className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-colors"
+          className="input"
           autoFocus
         />
       </div>
@@ -325,21 +325,21 @@ function InlineAddForm({ onSubmit, onCancel }: InlineAddFormProps) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="网站名称 (可选)"
-          className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-colors"
+          className="input"
         />
       </div>
       <div className="flex gap-2">
         <button
           type="submit"
           disabled={!url.trim()}
-          className="flex-1 py-2 px-4 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed rounded-md transition-colors"
+          className="btn-primary flex-1"
         >
           添加
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="py-2 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors"
+          className="btn-secondary"
         >
           取消
         </button>
@@ -534,15 +534,15 @@ export default function App() {
   );
 
   return (
-    <div className="w-[360px] min-h-[200px] max-h-[500px] flex flex-col bg-white dark:bg-gray-900 transition-colors">
+    <div className="w-[360px] min-h-[200px] max-h-[500px] flex flex-col bg-transparent transition-colors">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-        <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Clocky</h1>
+      <header className="flex items-center justify-between px-4 py-3 neo-inset border-b border-black/5 dark:border-white/5">
+        <h1 className="text-lg font-semibold">Clocky</h1>
         <div className="flex items-center gap-1">
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+            className="p-2 rounded-md neo-chip text-gray-600 dark:text-gray-300 hover:shadow-neo-in-sm active:shadow-neo-in-sm transition-all"
             title={resolvedTheme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
 
           >
@@ -570,7 +570,7 @@ export default function App() {
           {/* Settings */}
           <button
             onClick={handleOpenOptions}
-            className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+            className="p-2 rounded-md neo-chip text-gray-600 dark:text-gray-300 hover:shadow-neo-in-sm active:shadow-neo-in-sm transition-all"
             title="设置"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -593,7 +593,7 @@ export default function App() {
 
       {/* Status Bar */}
       {!isLoading && sites.length > 0 && (
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-800/50 text-sm border-b border-gray-100 dark:border-gray-700">
+        <div className="flex items-center justify-between px-4 py-2 neo-inset text-sm border-b border-black/5 dark:border-white/5">
           <span className="text-gray-600 dark:text-gray-400">
             今日进度:{' '}
             <span className="font-medium text-primary-600 dark:text-primary-400">
@@ -611,12 +611,12 @@ export default function App() {
 
       {/* Error Banner */}
       {error && (
-        <div className="px-4 py-2 bg-red-50 dark:bg-red-900/20 border-b border-red-100 dark:border-red-900/30">
+        <div className="px-4 py-2 neo-inset border-b border-black/5 dark:border-white/5">
           <div className="flex items-center justify-between">
             <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
             <button
               onClick={clearError}
-              className="text-red-500 hover:text-red-700 dark:hover:text-red-300"
+              className="p-1 rounded neo-chip text-red-500 hover:text-red-700 dark:hover:text-red-300 hover:shadow-neo-in-sm transition-all"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -633,16 +633,16 @@ export default function App() {
 
       {/* Quick Add Section */}
       {!showInlineForm ? (
-        <div className="p-4 border-b border-gray-100 dark:border-gray-700 space-y-2">
+        <div className="p-4 space-y-2 neo-inset">
           {/* Add Current Page Button */}
           {canAddCurrentPage && (
             <button
               onClick={handleAddCurrentSite}
               disabled={isCurrentSiteSaved}
-              className={`w-full py-2.5 px-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+              className={`btn-primary w-full py-2.5 flex items-center justify-center gap-2 ${
                 isCurrentSiteSaved
-                  ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                  : 'bg-primary-600 hover:bg-primary-700 text-white'
+                  ? 'neo-chip-inset text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                  : ''
               }`}
             >
               {isCurrentSiteSaved ? (
@@ -676,7 +676,7 @@ export default function App() {
           {/* Manual Add Button */}
           <button
             onClick={() => setShowInlineForm(true)}
-            className="w-full py-2 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors flex items-center justify-center gap-2"
+            className="btn-secondary w-full flex items-center justify-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
@@ -702,7 +702,7 @@ export default function App() {
         ) : displaySites.length === 0 ? (
           <EmptyState />
         ) : (
-          <ul className="divide-y divide-gray-100 dark:divide-gray-700">
+          <ul className="p-3 space-y-2">
             {displaySites.map((site) => (
               <SiteItem
                 key={site.id}
@@ -721,8 +721,8 @@ export default function App() {
 
       {/* Footer */}
       {!isLoading && displaySites.length > 0 && (
-        <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-700 text-center">
-          <span className="text-xs text-gray-400 dark:text-gray-500">
+        <div className="px-4 py-2 neo-inset text-center">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
             共 {sites.length} 个网站 · 点击标题打开，右侧按钮可标记/删除
           </span>
         </div>

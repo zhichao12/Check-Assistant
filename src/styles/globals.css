@@ -3,6 +3,47 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Neumorphism 主题变量（浅色） */
+    /* 参考 UI Style Matrix demo 19 */
+    --neo-bg: #e0e5ec;
+    --neo-surface: #e0e5ec;
+    --neo-text: #4a5568;
+    --neo-text-muted: #a0aec0;
+
+    /* 软挤出阴影（外凸/内凹） */
+    --neo-shadow-out: 9px 9px 16px rgb(163, 177, 198, 0.6),
+      -9px -9px 16px rgba(255, 255, 255, 0.5);
+    --neo-shadow-in: inset 6px 6px 10px 0 rgba(163, 177, 198, 0.7),
+      inset -6px -6px 10px 0 rgba(255, 255, 255, 0.8);
+
+    --neo-shadow-out-sm: 5px 5px 10px rgb(163, 177, 198, 0.6),
+      -5px -5px 10px rgba(255, 255, 255, 0.5);
+    --neo-shadow-in-sm: inset 3px 3px 6px 0 rgba(163, 177, 198, 0.7),
+      inset -3px -3px 6px 0 rgba(255, 255, 255, 0.8);
+  }
+
+	  .dark {
+	    /* Neumorphism 主题变量（深色）
+	       设计要点：单色深灰底、低对比高光、阴影更内敛，避免“脏灰” */
+	    /* 偏蓝黑基调 */
+	    --neo-bg: #161b23;
+	    --neo-surface: #161b23;
+	    --neo-text: #e6e9f0;
+	    --neo-text-muted: #8f9bb0;
+
+	    /* 蓝黑高光用轻微冷色白 */
+	    --neo-shadow-out: 9px 9px 16px rgba(0, 0, 0, 0.68),
+	      -9px -9px 16px rgba(210, 225, 245, 0.07);
+	    --neo-shadow-in: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.75),
+	      inset -6px -6px 10px 0 rgba(210, 225, 245, 0.08);
+
+	    --neo-shadow-out-sm: 5px 5px 10px rgba(0, 0, 0, 0.68),
+	      -5px -5px 10px rgba(210, 225, 245, 0.07);
+	    --neo-shadow-in-sm: inset 3px 3px 6px 0 rgba(0, 0, 0, 0.75),
+	      inset -3px -3px 6px 0 rgba(210, 225, 245, 0.08);
+	  }
+
   html {
     font-family:
       Inter,
@@ -16,11 +57,9 @@
   }
 
   body {
-    @apply bg-white text-gray-900 antialiased;
-  }
-
-  .dark body {
-    @apply bg-gray-900 text-gray-100;
+    background: var(--neo-bg);
+    color: var(--neo-text);
+    @apply antialiased;
   }
 
   /* Smooth theme transitions */
@@ -36,71 +75,116 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-transparent;
+    background: var(--neo-bg);
   }
 
-  ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded-full;
-  }
+	  ::-webkit-scrollbar-thumb {
+	    background: #cbd5e0;
+	    border-radius: 4px;
+	  }
 
-  .dark ::-webkit-scrollbar-thumb {
-    @apply bg-gray-600;
-  }
+	  ::-webkit-scrollbar-thumb:hover {
+	    background: #a0aec0;
+	  }
 
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
-  }
+	  .dark ::-webkit-scrollbar-thumb {
+	    background: #263040;
+	  }
 
-  .dark ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-500;
-  }
-}
+	  .dark ::-webkit-scrollbar-thumb:hover {
+	    background: #323c52;
+	  }
+	}
 
 @layer components {
+  /* Neumorphism 基础面板/内凹面板 */
+  .neo-surface {
+    background: var(--neo-surface);
+    box-shadow: var(--neo-shadow-out);
+    border: 1px solid color-mix(in srgb, var(--neo-text-muted) 12%, transparent);
+  }
+
+  .neo-inset {
+    background: var(--neo-surface);
+    box-shadow: var(--neo-shadow-in);
+    border: 1px solid color-mix(in srgb, var(--neo-text-muted) 10%, transparent);
+  }
+
+  .neo-chip {
+    background: var(--neo-surface);
+    box-shadow: var(--neo-shadow-out-sm);
+  }
+
+  .neo-chip-inset {
+    background: var(--neo-surface);
+    box-shadow: var(--neo-shadow-in-sm);
+  }
+
+  .neo-toast {
+    box-shadow: var(--neo-shadow-out-sm);
+  }
+
   /* Button base styles */
   .btn {
     @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium;
-    @apply transition-colors duration-150;
+    @apply transition-all duration-150;
     @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
     @apply dark:focus-visible:ring-offset-gray-800;
     @apply disabled:pointer-events-none disabled:opacity-50;
+    background: var(--neo-surface);
+    color: var(--neo-text);
+    box-shadow: var(--neo-shadow-out-sm);
+    border: 1px solid color-mix(in srgb, var(--neo-text-muted) 10%, transparent);
+  }
+
+  .btn:hover {
+    filter: brightness(0.98);
+  }
+
+  .btn:active {
+    box-shadow: var(--neo-shadow-in-sm);
+    transform: translateY(1px);
   }
 
   .btn-primary {
-    @apply btn bg-primary-600 text-white hover:bg-primary-700;
+    @apply btn;
+    color: theme('colors.primary.700');
   }
 
   .btn-secondary {
-    @apply btn bg-gray-100 text-gray-900 hover:bg-gray-200;
-    @apply dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600;
+    @apply btn;
   }
 
   .btn-ghost {
-    @apply btn bg-transparent text-gray-600 hover:bg-gray-100;
-    @apply dark:text-gray-300 dark:hover:bg-gray-800;
+    @apply btn;
+    background: transparent;
+    box-shadow: none;
+    border-color: transparent;
+    color: var(--neo-text-muted);
   }
 
   .btn-danger {
-    @apply btn bg-red-50 text-red-600 border border-red-200 hover:bg-red-100;
-    @apply dark:bg-red-900/20 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-900/30;
+    @apply btn;
+    color: theme('colors.error.600');
   }
 
   .btn-warning {
-    @apply btn bg-amber-50 text-amber-600 border border-amber-200 hover:bg-amber-100;
-    @apply dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800 dark:hover:bg-amber-900/30;
+    @apply btn;
+    color: theme('colors.warning.600');
   }
 
   /* Card styles with consistent elevation and borders */
   .card {
-    @apply rounded-xl bg-white shadow-sm;
-    @apply border border-gray-200;
-    @apply dark:bg-gray-800 dark:border-gray-700;
+    @apply rounded-xl;
+    background: var(--neo-surface);
+    box-shadow: var(--neo-shadow-out);
+    border: 1px solid color-mix(in srgb, var(--neo-text-muted) 10%, transparent);
     @apply transition-colors duration-150;
   }
 
   .card-header {
-    @apply px-5 py-4 border-b border-gray-100;
-    @apply dark:border-gray-700/50;
+    @apply px-5 py-4 border-b;
+    border-color: color-mix(in srgb, var(--neo-text-muted) 12%, transparent);
   }
 
   .card-body {
@@ -109,15 +193,16 @@
 
   /* Form input styles */
   .input {
-    @apply w-full rounded-lg border border-gray-300 px-3 py-2 text-sm;
-    @apply bg-white text-gray-900;
+    @apply w-full rounded-lg px-3 py-2 text-sm;
+    background: var(--neo-surface);
+    color: var(--neo-text);
+    box-shadow: var(--neo-shadow-in-sm);
+    border: 1px solid transparent;
     @apply placeholder-gray-400;
     @apply transition-colors duration-150;
     @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
-    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100;
-    @apply dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
     @apply dark:placeholder-gray-500;
-    @apply dark:disabled:bg-gray-800/50;
   }
 
   .select {
@@ -146,12 +231,15 @@
   }
 
   .toggle-switch-disabled {
-    @apply bg-gray-200 dark:bg-gray-600;
+    background: var(--neo-surface);
+    box-shadow: var(--neo-shadow-in-sm);
   }
 
   .toggle-switch-knob {
     @apply pointer-events-none inline-block h-4 w-4 transform rounded-full;
-    @apply bg-white shadow-sm transition-transform duration-200;
+    background: var(--neo-surface);
+    box-shadow: var(--neo-shadow-out-sm);
+    @apply transition-transform duration-200;
   }
 
   /* Status pills */
@@ -181,18 +269,21 @@
   }
 
   .action-btn-primary:hover {
-    @apply text-primary-600 bg-primary-50;
-    @apply dark:text-primary-400 dark:bg-primary-900/20;
+    @apply text-primary-600;
+    background: var(--neo-surface);
+    box-shadow: var(--neo-shadow-in-sm);
   }
 
   .action-btn-success:hover {
-    @apply text-emerald-600 bg-emerald-50;
-    @apply dark:text-emerald-400 dark:bg-emerald-900/20;
+    @apply text-emerald-600;
+    background: var(--neo-surface);
+    box-shadow: var(--neo-shadow-in-sm);
   }
 
   .action-btn-danger:hover {
-    @apply text-red-500 bg-red-50;
-    @apply dark:text-red-400 dark:bg-red-900/20;
+    @apply text-red-500;
+    background: var(--neo-surface);
+    box-shadow: var(--neo-shadow-in-sm);
   }
 
   /* Loading skeleton animation */

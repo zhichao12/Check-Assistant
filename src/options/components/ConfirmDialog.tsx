@@ -125,14 +125,7 @@ export function ConfirmDialog({
       {/* Dialog */}
       <div
         ref={dialogRef}
-        className="
-          relative w-full max-w-md
-          bg-white dark:bg-gray-800
-          rounded-xl shadow-xl
-          border border-gray-200 dark:border-gray-700
-          overflow-hidden
-          transform transition-all
-        "
+        className="relative w-full max-w-md card overflow-hidden transform transition-all"
       >
         {/* Content */}
         <div className="p-6">
@@ -143,7 +136,7 @@ export function ConfirmDialog({
                 flex-shrink-0 w-10 h-10
                 flex items-center justify-center
                 rounded-full
-                bg-gray-100 dark:bg-gray-700/50
+                neo-inset
               "
             >
               {icons[resolvedIcon]}
@@ -169,8 +162,8 @@ export function ConfirmDialog({
           className="
             flex flex-col-reverse sm:flex-row sm:justify-end gap-2
             px-6 py-4
-            bg-gray-50 dark:bg-gray-800/50
-            border-t border-gray-100 dark:border-gray-700/50
+            neo-inset
+            border-t border-black/5 dark:border-white/5
           "
         >
           <Button

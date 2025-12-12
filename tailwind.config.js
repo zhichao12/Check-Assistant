@@ -53,6 +53,10 @@ export default {
       boxShadow: {
         card: '0 1px 3px rgba(0, 0, 0, 0.1)',
         'card-dark': '0 1px 3px rgba(0, 0, 0, 0.3)',
+        'neo-out': 'var(--neo-shadow-out)',
+        'neo-in': 'var(--neo-shadow-in)',
+        'neo-out-sm': 'var(--neo-shadow-out-sm)',
+        'neo-in-sm': 'var(--neo-shadow-in-sm)',
       },
       transitionDuration: {
         DEFAULT: '150ms',

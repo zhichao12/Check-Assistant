@@ -69,7 +69,7 @@ export function Toast({
       className={`
         fixed bottom-4 left-1/2 -translate-x-1/2 z-50
         flex items-center gap-2
-        px-4 py-3 rounded-lg shadow-lg
+        px-4 py-3 rounded-lg neo-toast
         border border-gray-200 dark:border-gray-700
         transform transition-all duration-200
         ${styles[type]}

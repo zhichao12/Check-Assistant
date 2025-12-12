@@ -112,10 +112,10 @@ export function ReminderTimeEditor({
                 dark:focus-visible:ring-offset-gray-800
                 ${
                   isDisabled
-                    ? 'bg-gray-100 dark:bg-gray-700/50 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                    ? 'neo-chip-inset text-gray-400 dark:text-gray-500 cursor-not-allowed'
                     : isSelected
-                      ? 'bg-primary-600 text-white shadow-sm hover:bg-primary-700'
-                      : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400'
+                      ? 'bg-primary-600 text-white shadow-neo-out hover:bg-primary-700'
+                      : 'neo-chip text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
                 }
               `}
               title={getDayFullName(value)}

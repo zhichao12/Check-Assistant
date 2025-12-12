@@ -1,231 +1,229 @@
 # Clocky（签到助手）
 
-> [中文文档](./README_CN.md)
-
-[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-green?logo=googlechrome)](https://chrome.google.com)
+[![Chrome Extension](https://img.shields.io/badge/Chrome-扩展-green?logo=googlechrome)](https://chrome.google.com)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue)](https://developer.chrome.com/docs/extensions/mv3/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 
-A lightweight Chrome extension designed to help you track websites that require regular visits for check-ins, daily rewards, or routine tasks. Think of it as a focused bookmark manager specifically for sites requiring periodic visits.
+一款轻量级 Chrome 扩展，帮助你跟踪需要定期访问的网站，如签到、每日奖励或例行任务。可以将它理解为专为周期性访问网站设计的专注型书签管理器。
 
-## ✨ Key Features
+## ✨ 核心功能
 
-- **Quick Save** – Add the current tab as a check-in site with one click, automatically extracting favicon and hostname
-- **Status Tracking** – Mark sites as "Visited" or "Checked In" with clear visual indicators
-- **Badge Counter** – Extension badge displays the number of pending check-ins at a glance
-- **Scheduled Reminders** – Set daily reminder times using Chrome Alarms & Notifications
-- **Snooze Support** – "Remind me later" option for flexible reminder handling
-- **Auto-Detection** – Content script detects visits to saved sites and prompts to mark status
-- **Theme Switching** – Choose Light, Dark, or System-based appearance
-- **One-Click Reset** – Reset all daily statuses to start fresh
+- **一键保存** – 点击扩展图标即可保存当前网站，自动提取网站图标和域名
+- **状态追踪** – 将网站标记为"已访问"或"已签到"，清晰的视觉指示
+- **角标计数** – 扩展图标上显示待签到网站数量，一目了然
+- **定时提醒** – 使用 Chrome Alarms 和 Notifications 设置每日提醒时间
+- **稍后提醒** – 支持"稍后提醒"功能，灵活处理提醒
+- **自动检测** – 内容脚本检测对已保存网站的访问，提示标记状态
+- **主题切换** – 支持浅色、深色或跟随系统的外观设置
+- **一键重置** – 重置所有今日状态，开始新的一天
 
-## 📸 Screenshots
+## 📸 截图
 
-<!-- TODO: Add screenshots of the extension in action -->
-| Popup View | Options Page |
-|------------|--------------|
-| _Screenshot placeholder_ | _Screenshot placeholder_ |
+<!-- TODO: 添加扩展使用截图 -->
+| 弹窗界面 | 设置页面 |
+|----------|----------|
+| _截图占位_ | _截图占位_ |
 
-## 🚀 Installation
+## 🚀 安装
 
-### Prerequisites
+### 环境要求
 
 - **Node.js** >= 18.0.0
-- **npm** (included with Node.js)
+- **npm**（随 Node.js 一起安装）
 
-### Install Dependencies
+### 安装依赖
 
 ```bash
 npm install
 ```
 
-### Build for Production
+### 生产构建
 
 ```bash
 npm run build
 ```
 
-The production build is output to the `dist/` directory.
+生产构建输出到 `dist/` 目录。
 
-## 📦 Loading the Extension in Chrome
+## 📦 在 Chrome 中加载扩展
 
-1. Open Chrome and navigate to `chrome://extensions/`
-2. Enable **Developer mode** using the toggle in the top-right corner
-3. Click **Load unpacked**
-4. Select the `dist/` folder from this project
-5. The extension icon should appear in your browser toolbar
+1. 打开 Chrome 浏览器，访问 `chrome://extensions/`
+2. 点击右上角的 **开发者模式** 开关启用开发者模式
+3. 点击 **加载已解压的扩展程序**
+4. 选择本项目的 `dist/` 文件夹
+5. 扩展图标将出现在浏览器工具栏中
 
-> **Tip:** After making changes, click the refresh icon on the extension card in `chrome://extensions/` to reload the latest build.
+> **提示：** 修改代码后，在 `chrome://extensions/` 页面点击扩展卡片上的刷新按钮以重新加载最新构建。
 
-## 📖 Usage Guide
+## 📖 使用指南
 
-### Popup Interface
+### 弹窗界面
 
-The popup is the primary interface for managing your check-in sites:
+弹窗是管理签到网站的主要界面：
 
-1. **Add Current Site** – Click the extension icon while on any website, then click the "Add Current Page" button
-2. **Manual Add** – Click the "+" button to manually enter a URL and optional title
-3. **Mark Status** – Use the eye icon (👁) to mark as visited, or the checkmark (✓) to mark as checked in
-4. **Open Site** – Click the site title to navigate directly to it
-5. **Delete Site** – Click the trash icon to remove a site from your list
-6. **Toggle Theme** – Click the sun/moon icon in the header to switch themes
+1. **添加当前网站** – 在任意网站上点击扩展图标，然后点击"添加当前页面"按钮
+2. **手动添加** – 点击"+"按钮手动输入网址和可选的网站名称
+3. **标记状态** – 使用眼睛图标（👁）标记为已访问，或使用勾选图标（✓）标记为已签到
+4. **打开网站** – 点击网站标题直接跳转到该网站
+5. **删除网站** – 点击垃圾桶图标从列表中移除网站
+6. **切换主题** – 点击顶栏的太阳/月亮图标切换主题
 
-### Options Page
+### 设置页面
 
-Access the Options page by right-clicking the extension icon and selecting "Options", or click the gear icon in the popup:
+通过右键点击扩展图标选择"选项"，或点击弹窗中的齿轮图标访问设置页面：
 
-- **Appearance** – Choose Light, Dark, or System theme; toggle badge visibility
-- **Reminder Settings** – Enable/disable reminders, configure multiple reminder times with day-of-week selection
-- **Notification Sound** – Toggle audio alerts for reminders
-- **Snooze Duration** – Set how long "Remind me later" delays the next notification
-- **Auto-Detection** – Enable automatic visit detection when browsing saved sites
-- **Daily Reset Time** – Configure when daily statuses should reset
-- **Data Management** – Clear all sites or reset today's status in bulk
+- **外观** – 选择浅色、深色或跟随系统主题；切换角标显示
+- **提醒设置** – 启用/禁用提醒，配置多个提醒时间及星期选择
+- **通知声音** – 开启或关闭提醒的音频提示
+- **稍后提醒时长** – 设置"稍后提醒"延迟下次通知的时间
+- **自动检测** – 启用浏览已保存网站时的自动访问检测
+- **每日重置时间** – 配置每日状态重置的时间
+- **数据管理** – 批量清除所有网站或重置今日状态
 
-## 🛠 Development Setup
+## 🛠 开发环境配置
 
-### Environment Requirements
+### 环境要求
 
-| Tool        | Version   |
-|-------------|-----------|
-| Node.js     | >= 18.0.0 |
-| npm         | >= 8.0.0  |
+| 工具    | 版本      |
+|---------|-----------|
+| Node.js | >= 18.0.0 |
+| npm     | >= 8.0.0  |
 
-### Available Scripts
+### 可用脚本
 
-| Command                  | Description                             |
-|--------------------------|-----------------------------------------|
-| `npm run dev`            | Start Vite dev server with HMR          |
-| `npm run build`          | TypeScript compile + production build   |
-| `npm run preview`        | Preview the production build locally    |
-| `npm run lint`           | Run ESLint checks                       |
-| `npm run lint:fix`       | Run ESLint and auto-fix issues          |
-| `npm run format`         | Format code with Prettier               |
-| `npm run format:check`   | Check code formatting without changes   |
-| `npm run typecheck`      | Run TypeScript type checking            |
-| `npm run test`           | Run Vitest unit tests                   |
-| `npm run test:watch`     | Run tests in watch mode                 |
+| 命令                     | 说明                            |
+|--------------------------|---------------------------------|
+| `npm run dev`            | 启动 Vite 开发服务器，支持热更新   |
+| `npm run build`          | TypeScript 编译 + 生产构建       |
+| `npm run preview`        | 本地预览生产构建                  |
+| `npm run lint`           | 运行 ESLint 检查                 |
+| `npm run lint:fix`       | 运行 ESLint 并自动修复问题        |
+| `npm run format`         | 使用 Prettier 格式化代码          |
+| `npm run format:check`   | 检查代码格式（不修改）            |
+| `npm run typecheck`      | 运行 TypeScript 类型检查          |
+| `npm run test`           | 运行 Vitest 单元测试              |
+| `npm run test:watch`     | 以监听模式运行测试                |
 
-### Development Workflow
+### 开发工作流
 
 ```bash
-# Start the development server
+# 启动开发服务器
 npm run dev
 
-# In Chrome, load the dist/ folder as an unpacked extension
-# Changes will hot-reload automatically (popup/options pages)
+# 在 Chrome 中将 dist/ 文件夹作为已解压的扩展程序加载
+# 弹窗/设置页面的更改将自动热更新
 
-# Run checks before committing
+# 提交前运行检查
 npm run lint && npm run typecheck && npm run test
 ```
 
-## 📁 Project Structure
+## 📁 项目结构
 
 ```plaintext
 checkin-assistant/
 ├── public/
-│   └── icons/              # Extension icons (16, 32, 48, 128 px)
+│   └── icons/              # 扩展图标 (16, 32, 48, 128 像素)
 ├── src/
 │   ├── background/
-│   │   └── index.ts        # Service Worker (alarms, notifications, messaging)
+│   │   └── index.ts        # Service Worker（定时器、通知、消息传递）
 │   ├── popup/
-│   │   ├── index.html      # Popup entry HTML
-│   │   ├── main.tsx        # React entry point
-│   │   └── App.tsx         # Main popup component
+│   │   ├── index.html      # 弹窗入口 HTML
+│   │   ├── main.tsx        # React 入口点
+│   │   └── App.tsx         # 弹窗主组件
 │   ├── options/
-│   │   ├── index.html      # Options page entry HTML
-│   │   ├── main.tsx        # React entry point
-│   │   ├── App.tsx         # Main options component
-│   │   └── components/     # Reusable UI components
+│   │   ├── index.html      # 设置页入口 HTML
+│   │   ├── main.tsx        # React 入口点
+│   │   ├── App.tsx         # 设置页主组件
+│   │   └── components/     # 可复用 UI 组件
 │   ├── content/
-│   │   └── index.ts        # Content script for visit detection
+│   │   └── index.ts        # 内容脚本（访问检测）
 │   ├── lib/
-│   │   ├── storage.ts      # Chrome Storage API wrapper & data models
-│   │   ├── hooks/          # Custom React hooks (useStorage)
-│   │   └── index.ts        # Lib exports
+│   │   ├── storage.ts      # Chrome Storage API 封装与数据模型
+│   │   ├── hooks/          # 自定义 React Hooks (useStorage)
+│   │   └── index.ts        # 库导出
 │   ├── shared/
-│   │   ├── types.ts        # Shared TypeScript types & interfaces
-│   │   └── utils.ts        # Utility functions
+│   │   ├── types.ts        # 共享 TypeScript 类型与接口
+│   │   └── utils.ts        # 工具函数
 │   ├── styles/
-│   │   └── globals.css     # Tailwind CSS & global styles
-│   ├── __tests__/          # Unit tests (Vitest)
-│   ├── manifest.ts         # Extension manifest (MV3) definition
-│   └── vite-env.d.ts       # Vite environment types
+│   │   └── globals.css     # Tailwind CSS 与全局样式
+│   ├── __tests__/          # 单元测试 (Vitest)
+│   ├── manifest.ts         # 扩展清单 (MV3) 定义
+│   └── vite-env.d.ts       # Vite 环境类型
 ├── docs/
-│   └── spec.md             # Product specification document
-├── .eslintrc.cjs           # ESLint configuration
-├── .prettierrc             # Prettier configuration
-├── tailwind.config.js      # Tailwind CSS configuration
-├── tsconfig.json           # TypeScript configuration
-├── vite.config.ts          # Vite build configuration
-├── vitest.config.ts        # Vitest test configuration
-└── package.json            # Project dependencies & scripts
+│   └── spec.md             # 产品规格文档
+├── .eslintrc.cjs           # ESLint 配置
+├── .prettierrc             # Prettier 配置
+├── tailwind.config.js      # Tailwind CSS 配置
+├── tsconfig.json           # TypeScript 配置
+├── vite.config.ts          # Vite 构建配置
+├── vitest.config.ts        # Vitest 测试配置
+└── package.json            # 项目依赖与脚本
 ```
 
-## 🧰 Tech Stack
+## 🧰 技术栈
 
-| Category         | Technology                                                 |
-|------------------|------------------------------------------------------------|
-| Extension API    | Chrome Extension Manifest V3                               |
-| UI Framework     | React 18 + TypeScript                                      |
-| Build Tool       | Vite + [@crxjs/vite-plugin](https://crxjs.dev/vite-plugin) |
-| Styling          | Tailwind CSS                                               |
-| State Management | Zustand                                                    |
-| Testing          | Vitest + jsdom                                             |
-| Linting          | ESLint + Prettier                                          |
-| Storage          | Chrome Storage Sync API                                    |
+| 类别     | 技术                                                        |
+|----------|-------------------------------------------------------------|
+| 扩展 API | Chrome Extension Manifest V3                                |
+| UI 框架  | React 18 + TypeScript                                       |
+| 构建工具 | Vite + [@crxjs/vite-plugin](https://crxjs.dev/vite-plugin)  |
+| 样式     | Tailwind CSS                                                |
+| 状态管理 | Zustand                                                     |
+| 测试     | Vitest + jsdom                                              |
+| 代码规范 | ESLint + Prettier                                           |
+| 存储     | Chrome Storage Sync API                                     |
 
-## 🌐 Localization
+## 🌐 语言切换
 
-This project provides documentation in both English and Chinese:
+本项目提供中英文双语文档：
 
-- **English** – You are reading it
-- **Chinese** – See [README_CN.md](./README_CN.md)
+- **中文** – 您正在阅读的版本
+- **English** – 查看 [README.md](./README.md)
 
-The extension UI is currently available in Chinese. Contributions for additional language support are welcome.
+扩展界面目前为中文。欢迎贡献其他语言支持。
 
-## 🤝 Contributing
+## 🤝 参与贡献
 
-Contributions are welcome! Please follow these guidelines:
+欢迎贡献代码！请遵循以下指南：
 
-### Before Submitting
+### 提交前准备
 
-1. **Fork** the repository and create a feature branch
-2. **Install** dependencies: `npm install`
-3. **Run checks** before committing:
+1. **Fork** 本仓库并创建功能分支
+2. **安装** 依赖：`npm install`
+3. **提交前运行检查**：
 
    ```bash
-   npm run lint        # Check for linting errors
-   npm run typecheck   # Verify TypeScript types
-   npm run test        # Run unit tests
-   npm run format      # Format code
+   npm run lint        # 检查代码规范
+   npm run typecheck   # 验证 TypeScript 类型
+   npm run test        # 运行单元测试
+   npm run format      # 格式化代码
    ```
 
-4. Ensure all checks pass with no errors
+4. 确保所有检查通过无错误
 
-### Commit Messages
+### 提交信息规范
 
-We recommend using [Conventional Commits](https://www.conventionalcommits.org/) format:
+推荐使用 [Conventional Commits](https://www.conventionalcommits.org/) 格式：
 
-- `feat: add new feature`
-- `fix: resolve bug in popup`
-- `docs: update README`
-- `style: format code`
-- `refactor: restructure storage module`
-- `test: add unit tests for utils`
+- `feat: 添加新功能`
+- `fix: 修复弹窗中的问题`
+- `docs: 更新文档`
+- `style: 格式化代码`
+- `refactor: 重构存储模块`
+- `test: 添加工具函数的单元测试`
 
-### Pull Request Guidelines
+### Pull Request 指南
 
-- Provide a clear description of the changes and motivation
-- Reference any related issues
-- Include screenshots for UI changes
-- Ensure CI checks pass
+- 提供清晰的变更描述和动机说明
+- 关联相关的 Issue
+- UI 变更请附上截图
+- 确保 CI 检查通过
 
-## 📄 License
+## 📄 许可证
 
-This project is open source. See the repository for license details.
+本项目为开源项目，具体许可证信息请查看仓库。
 
 ---
 
-Made with ❤️ for productivity enthusiasts
+用 ❤️ 为效率爱好者打造

@@ -180,8 +180,8 @@ function ThemeSelector({ value, onChange }: ThemeSelectorProps) {
             focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500
             ${
               value === theme.id
-                ? 'bg-primary-600 text-white shadow-sm'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                ? 'neo-chip-inset text-primary-700 dark:text-primary-300'
+                : 'neo-chip text-gray-700 dark:text-gray-300 hover:text-primary-700 dark:hover:text-primary-300'
             }
           `}
         >
